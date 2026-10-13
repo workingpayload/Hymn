@@ -22,7 +22,7 @@ export const COUNTER_KEY = 'musicsm:downloads:total';
 // so the page counts both apps. DESKTOP_GITHUB_REPO=none leaves them out.
 const desktopRepoEnv = (process.env.DESKTOP_GITHUB_REPO || '').trim();
 export const DESKTOP_REPO =
-  desktopRepoEnv.toLowerCase() === 'none' ? null : desktopRepoEnv || 'workingpayload/MusicSM-Desktop';
+  desktopRepoEnv.toLowerCase() === 'none' ? null : desktopRepoEnv || 'workingpayload/Hymn-Desktop';
 
 // GitHub resets an asset's `download_count` to 0 whenever the APK is deleted and re-uploaded, or a
 // release is recreated — so a naive sum across releases drops on every such publish. These two keys

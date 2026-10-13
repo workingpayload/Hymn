@@ -10,7 +10,7 @@ web/
 ├── app.js            fills the page in from the API; pure progressive enhancement
 ├── icon.png          the launcher icon, used for the favicon and nav
 ├── icon-large.jpg    the hero artwork, cropped from the 1024px source icon
-├── install.sh        one-command Mac install of MusicSM Desktop (curl … | bash)
+├── install.sh        one-command Mac install of Hymn (curl … | bash)
 └── api/
     ├── _lib.js       shared GitHub + Redis helpers (the _ prefix keeps it off the router)
     ├── release.js    latest release + lifetime totals, edge-cached for 5 minutes
@@ -59,10 +59,10 @@ name (e.g. `MusicSM.Wear.v3.0.0.apk`) is treated as the watch build:
   the Android total; `downloads.wear` carries its share for the hover split.
 - Sign it with the **same key** as the phone APK, or the watch and phone can't talk.
 
-### MusicSM Desktop
+### Hymn for desktop
 
 The desktop app is released from its own repo (`DESKTOP_GITHUB_REPO`, default
-`workingpayload/MusicSM-Desktop`).
+`workingpayload/Hymn-Desktop`).
 
 **Download buttons.** Under the Android button sit **Download for Windows** and **Download for Mac**,
 plain links to `/api/download?desktop=windows|mac`. That picks the `.msi` / `.dmg` from the newest
@@ -130,7 +130,7 @@ All optional.
 | Variable | Default | Why you might set it |
 | --- | --- | --- |
 | `GITHUB_REPO` | `workingpayload/Hymn` | Point the page at a different repo. |
-| `DESKTOP_GITHUB_REPO` | `workingpayload/MusicSM-Desktop` | Where MusicSM Desktop is released, if you name that repo differently; `none` hides the desktop buttons and leaves desktop downloads out of the total. |
+| `DESKTOP_GITHUB_REPO` | `workingpayload/Hymn-Desktop` | Where the Hymn desktop app is released, if you name that repo differently; `none` hides the desktop buttons and leaves desktop downloads out of the total. |
 | `GITHUB_TOKEN` | — | Lifts GitHub's 60-requests-per-hour unauthenticated limit, which serverless functions share across a region. The 5-minute edge cache normally keeps usage far below it, so this is only worth adding if you see `502`s from `/api/release`. |
 | `KV_REST_API_URL` | — | Set for you by the Upstash integration. |
 | `KV_REST_API_TOKEN` | — | Set for you by the Upstash integration. |
