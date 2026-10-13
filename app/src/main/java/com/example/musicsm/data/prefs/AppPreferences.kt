@@ -224,6 +224,12 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
     fun setAnimatedArtworkSource(value: String) =
         prefs.edit().putString(KEY_ANIMATED_ART_SOURCE, value).apply()
 
+    /** Show a playing cassette tape instead of the cover art in ambient mode. */
+    val ambientCassette: Flow<Boolean> get() = watch(KEY_AMBIENT_CASSETTE) { ambientCassetteNow }
+    val ambientCassetteNow: Boolean get() = prefs.getBoolean(KEY_AMBIENT_CASSETTE, true)
+    fun setAmbientCassette(value: Boolean) =
+        prefs.edit().putBoolean(KEY_AMBIENT_CASSETTE, value).apply()
+
     // --- audio effects -----------------------------------------------------
 
     val effectsEnabled: Flow<Boolean> get() = watch(KEY_FX_ENABLED) { effectsEnabledNow }
@@ -433,6 +439,11 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
         get() = prefs.getString(KEY_DISMISSED_UPDATE, null)
         set(value) = prefs.edit().putString(KEY_DISMISSED_UPDATE, value).apply()
 
+    /** The one-time "MusicSM is now Hymn" intro has played (or was skipped on a fresh install). */
+    var hymnIntroSeen: Boolean
+        get() = prefs.getBoolean(KEY_HYMN_INTRO_SEEN, false)
+        set(value) = prefs.edit().putBoolean(KEY_HYMN_INTRO_SEEN, value).apply()
+
     // --- queue snapshot ----------------------------------------------------
 
     fun saveQueue(songs: List<Song>, index: Int, positionMs: Long) {
@@ -607,6 +618,7 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
         private const val STYLE_FULL_SCREEN = "FULL_SCREEN"
         private const val STYLE_CARD = "CARD"
         private const val KEY_ANIMATED_ART_SOURCE = "animated_artwork_source"
+        private const val KEY_AMBIENT_CASSETTE = "ambient_cassette"
         private const val KEY_RESTORE_QUEUE = "restore_queue"
         private const val KEY_SKIP_SILENCE = "skip_silence"
         private const val KEY_AUTOPLAY = "autoplay_radio"
@@ -640,6 +652,7 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
         private const val KEY_NOW_PLAYING = "now_playing"
         private const val KEY_NOW_PLAYING_IS_PLAYING = "now_playing_is_playing"
         private const val KEY_DISMISSED_UPDATE = "dismissed_update_version"
+        private const val KEY_HYMN_INTRO_SEEN = "hymn_intro_seen"
 
         /**
          * The settings included in a backup. Session/volatile keys (queue, now-playing, sleep

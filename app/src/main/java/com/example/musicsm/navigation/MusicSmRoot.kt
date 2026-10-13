@@ -86,6 +86,8 @@ import com.example.musicsm.ui.player.PlayerViewModel
 import com.example.musicsm.ui.update.UpdateDialog
 import com.example.musicsm.ui.update.UpdateState
 import com.example.musicsm.ui.update.UpdateViewModel
+import com.example.musicsm.ui.rename.HymnIntroOverlay
+import com.example.musicsm.ui.rename.HymnIntroViewModel
 import com.example.musicsm.ui.account.GoogleSignInDialog
 import com.example.musicsm.ui.account.YouTubeAccountViewModel
 import com.example.musicsm.ui.account.YouTubeSignInPromptDialog
@@ -112,10 +114,12 @@ fun MusicSmRoot(
     val intentViewModel: AppIntentViewModel = hiltViewModel()
     val updateViewModel: UpdateViewModel = hiltViewModel()
     val accountViewModel: YouTubeAccountViewModel = hiltViewModel()
+    val hymnIntroViewModel: HymnIntroViewModel = hiltViewModel()
     val playerState by playerViewModel.state.collectAsStateWithLifecycle()
     val updateState by updateViewModel.state.collectAsStateWithLifecycle()
     val signInPrompt by accountViewModel.prompt.collectAsStateWithLifecycle()
     val showSignIn by accountViewModel.showSignIn.collectAsStateWithLifecycle()
+    val showHymnIntro by hymnIntroViewModel.visible.collectAsStateWithLifecycle()
 
     // Quietly look for a newer GitHub release once per launch; the popup only shows a version the
     // user hasn't already tapped "Later" on.
@@ -541,8 +545,17 @@ fun MusicSmRoot(
                     )
                 }
 
+                // One-time "MusicSM is now Hymn" intro for people updating from MusicSM. Popups
+                // (which open in their own windows) wait until it's gone.
+                if (showHymnIntro) {
+                    HymnIntroOverlay(
+                        onFinished = hymnIntroViewModel::dismiss,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
+
                 // "A new version is available" popup (once per launch, per non-dismissed version).
-                (updateState as? UpdateState.Available)?.let { available ->
+                (updateState as? UpdateState.Available)?.takeIf { !showHymnIntro }?.let { available ->
                     val appVersion = remember {
                         runCatching {
                             context.packageManager.getPackageInfo(context.packageName, 0).versionName
@@ -568,7 +581,7 @@ fun MusicSmRoot(
                         },
                         onClose = accountViewModel::cancelSignIn,
                     )
-                } else {
+                } else if (!showHymnIntro) {
                     signInPrompt?.let { reason ->
                         YouTubeSignInPromptDialog(
                             reason = reason,

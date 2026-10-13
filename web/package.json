@@ -2,7 +2,7 @@
   "name": "musicsm-landing",
   "version": "2.0.2",
   "private": true,
-  "description": "Download page for the MusicSM Android app.",
+  "description": "Download page for the Hymn Android app.",
   "type": "module",
   "engines": {
     "node": ">=20"

@@ -86,7 +86,7 @@ class BackupRepositoryImpl @Inject constructor(
     override suspend fun import(json: String): BackupSummary = withContext(Dispatchers.IO) {
         val root = runCatching { JSONObject(json) }.getOrNull()
             ?: throw IllegalArgumentException("Not a valid backup file")
-        require(root.optString("format") == FORMAT) { "Not a MusicSM backup file" }
+        require(root.optString("format") == FORMAT) { "Not a Hymn backup file" }
 
         // 1) Songs first — they are the foreign-key parent of everything else. IGNORE preserves any
         //    metadata already on disk.

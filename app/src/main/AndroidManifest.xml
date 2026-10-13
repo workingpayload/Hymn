@@ -33,7 +33,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicSM">
 
-        <!-- Android Auto: declares MusicSM as a media app. -->
+        <!-- Android Auto: declares Hymn as a media app. -->
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" />
@@ -69,7 +69,7 @@
                 <data android:scheme="musicsm" />
             </intent-filter>
 
-            <!-- "Open with MusicSM" for YouTube / YouTube Music track and playlist links. -->
+            <!-- "Open with Hymn" for YouTube / YouTube Music track and playlist links. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -85,7 +85,7 @@
                 <data android:scheme="https" android:host="music.youtube.com" android:pathPrefix="/playlist" />
             </intent-filter>
 
-            <!-- "Share to MusicSM" from YouTube, a browser, or any text. -->
+            <!-- "Share to Hymn" from YouTube, a browser, or any text. -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -94,7 +94,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
 
-            <!-- "Play <something> on MusicSM" from Assistant or a car head unit. -->
+            <!-- "Play <something> on Hymn" from Assistant or a car head unit. -->
             <intent-filter>
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
 

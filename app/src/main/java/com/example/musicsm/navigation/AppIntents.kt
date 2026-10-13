@@ -59,7 +59,7 @@ fun Intent?.toAppIntent(): AppIntent? {
             }
         }
 
-        // "Play <x> on MusicSM" from Assistant / a car head unit.
+        // "Play <x> on Hymn" from Assistant / a car head unit.
         MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH -> {
             val query = intent.getStringExtra(SearchManager.QUERY).orEmpty().trim()
             if (query.isBlank()) AppIntent.Resume else AppIntent.Search(query, playFirst = true)
@@ -141,5 +141,5 @@ private fun String.toUri(): Uri = Uri.parse(this)
 private const val PLAYLIST_URL = "https://www.youtube.com/playlist?list="
 private val VIDEO_PATHS = setOf("shorts", "embed", "live", "v")
 
-/** Also matches our own scheme so a shared playlist link pasted into "Share to MusicSM" works. */
+/** Also matches our own scheme so a shared playlist link pasted into "Share to Hymn" works. */
 private val FIRST_URL = Regex("""(?:https?|musicsm)://\S+""")

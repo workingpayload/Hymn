@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.CloseFullscreen
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
@@ -67,10 +68,12 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsCompat
@@ -192,6 +195,7 @@ fun AmbientScreen(
         isPlaying = state.isPlaying,
     )
     val accent = rememberMixedAccent(currentAccent, mixArt)
+    val cassette by viewModel.ambientCassette.collectAsStateWithLifecycle()
 
     // Deliberately mismatched, mutually prime-ish periods: the layers never line back up, so the
     // composition keeps changing instead of visibly looping.
@@ -310,17 +314,48 @@ fun AmbientScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(56.dp),
                     ) {
-                        AmbientArtwork(
-                            url = song?.artworkUrl,
-                            accent = accent,
-                            breath = breath,
-                            mixArt = mixArt,
-                            modifier = Modifier.fillMaxHeight(0.78f).aspectRatio(1f),
-                        )
+                        Crossfade(
+                            targetState = cassette,
+                            animationSpec = tween(600),
+                            label = "ambientCenterpiece",
+                        ) { showCassette ->
+                            if (showCassette) {
+                                AmbientCassette(
+                                    url = song?.artworkUrl,
+                                    title = song?.title,
+                                    artist = song?.artist,
+                                    isPlaying = state.isPlaying,
+                                    positionFlow = viewModel.position,
+                                    durationMs = state.durationMs,
+                                    accent = accent,
+                                    breath = breath,
+                                    mixArt = mixArt,
+                                    modifier = Modifier.fillMaxHeight(0.66f).aspectRatio(CASSETTE_ASPECT),
+                                )
+                            } else {
+                                AmbientArtwork(
+                                    url = song?.artworkUrl,
+                                    accent = accent,
+                                    breath = breath,
+                                    mixArt = mixArt,
+                                    modifier = Modifier.fillMaxHeight(0.78f).aspectRatio(1f),
+                                )
+                            }
+                        }
                         Column(
                             modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.Start,
                         ) {
+                            // In landscape the centrepiece fills most of the height, so a corner
+                            // clock would sit on top of it. Head the text column with it instead.
+                            AmbientClock(
+                                timeSize = 60.sp,
+                                modifier = Modifier.graphicsLayer {
+                                    translationX = cos(driftPhase.value * 2f) * 8f
+                                    translationY = sin(driftPhase.value) * 8f
+                                },
+                            )
+                            Spacer(Modifier.height(20.dp))
                             AmbientText(
                                 title = song?.title,
                                 artist = song?.artist,
@@ -341,13 +376,34 @@ fun AmbientScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
                     ) {
-                        AmbientArtwork(
-                            url = song?.artworkUrl,
-                            accent = accent,
-                            breath = breath,
-                            mixArt = mixArt,
-                            modifier = Modifier.fillMaxWidth(0.70f).aspectRatio(1f),
-                        )
+                        Crossfade(
+                            targetState = cassette,
+                            animationSpec = tween(600),
+                            label = "ambientCenterpiece",
+                        ) { showCassette ->
+                            if (showCassette) {
+                                AmbientCassette(
+                                    url = song?.artworkUrl,
+                                    title = song?.title,
+                                    artist = song?.artist,
+                                    isPlaying = state.isPlaying,
+                                    positionFlow = viewModel.position,
+                                    durationMs = state.durationMs,
+                                    accent = accent,
+                                    breath = breath,
+                                    mixArt = mixArt,
+                                    modifier = Modifier.fillMaxWidth(0.98f).aspectRatio(CASSETTE_ASPECT),
+                                )
+                            } else {
+                                AmbientArtwork(
+                                    url = song?.artworkUrl,
+                                    accent = accent,
+                                    breath = breath,
+                                    mixArt = mixArt,
+                                    modifier = Modifier.fillMaxWidth(0.70f).aspectRatio(1f),
+                                )
+                            }
+                        }
                         Spacer(Modifier.height(44.dp))
                         AmbientText(
                             title = song?.title,
@@ -364,18 +420,20 @@ fun AmbientScreen(
                     }
                 }
             }
-        }
 
-        AmbientClock(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(36.dp)
-                .graphicsLayer {
-                    // The clock is the brightest static element, so give it its own orbit.
-                    translationX = cos(driftPhase.value * 2f) * 20f
-                    translationY = sin(driftPhase.value) * 20f
-                },
-        )
+            if (!landscape) {
+                AmbientClock(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(36.dp)
+                        .graphicsLayer {
+                            // The clock is the brightest static element, so give it its own orbit.
+                            translationX = cos(driftPhase.value * 2f) * 20f
+                            translationY = sin(driftPhase.value) * 20f
+                        },
+                )
+            }
+        }
 
         AnimatedVisibility(
             visible = controlsVisible,
@@ -396,6 +454,11 @@ fun AmbientScreen(
                 onNext = {
                     lastInteraction = System.currentTimeMillis()
                     viewModel.next()
+                },
+                showingCassette = cassette,
+                onToggleCassette = {
+                    lastInteraction = System.currentTimeMillis()
+                    viewModel.setAmbientCassette(!cassette)
                 },
                 onExit = onExit,
                 modifier = Modifier.padding(bottom = 52.dp),
@@ -646,6 +709,8 @@ private fun AmbientControls(
     onPrevious: () -> Unit,
     onPlayPause: () -> Unit,
     onNext: () -> Unit,
+    showingCassette: Boolean,
+    onToggleCassette: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -693,6 +758,23 @@ private fun AmbientControls(
             )
         }
         Spacer(Modifier.width(2.dp))
+        IconButton(onClick = onToggleCassette) {
+            if (showingCassette) {
+                Icon(
+                    Icons.Filled.Album,
+                    contentDescription = stringResource(R.string.ambient_show_cover),
+                    tint = Color.White.copy(alpha = 0.6f),
+                    modifier = Modifier.size(22.dp),
+                )
+            } else {
+                Icon(
+                    painterResource(R.drawable.ic_cassette),
+                    contentDescription = stringResource(R.string.ambient_show_cassette),
+                    tint = Color.White.copy(alpha = 0.6f),
+                    modifier = Modifier.size(22.dp),
+                )
+            }
+        }
         IconButton(onClick = onExit) {
             Icon(
                 Icons.Filled.CloseFullscreen,
@@ -706,7 +788,7 @@ private fun AmbientControls(
 
 /** Big, dim clock — the part you actually read from across a room. */
 @Composable
-private fun AmbientClock(modifier: Modifier = Modifier) {
+private fun AmbientClock(modifier: Modifier = Modifier, timeSize: TextUnit = 76.sp) {
     val context = LocalContext.current
     val locale = currentLocale()
     // Respect the system 12/24-hour setting and locale rather than forcing "h:mm".
@@ -732,8 +814,8 @@ private fun AmbientClock(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             now.format(formatter),
-            fontSize = 76.sp,
-            lineHeight = 80.sp,
+            fontSize = timeSize,
+            lineHeight = timeSize * 1.05f,
             fontWeight = FontWeight.ExtraLight,
             // Tightened tracking stops a thin, very large face from looking loose and cheap.
             letterSpacing = (-2).sp,

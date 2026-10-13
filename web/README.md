@@ -1,4 +1,4 @@
-# MusicSM download page
+# Hymn download page
 
 A single static page plus three serverless functions. No framework, no build step and no npm
 dependencies — it runs on Node's built-in `fetch`.
@@ -129,7 +129,7 @@ All optional.
 
 | Variable | Default | Why you might set it |
 | --- | --- | --- |
-| `GITHUB_REPO` | `workingpayload/MusicSM` | Point the page at a different repo. |
+| `GITHUB_REPO` | `workingpayload/Hymn` | Point the page at a different repo. |
 | `DESKTOP_GITHUB_REPO` | `workingpayload/MusicSM-Desktop` | Where MusicSM Desktop is released, if you name that repo differently; `none` hides the desktop buttons and leaves desktop downloads out of the total. |
 | `GITHUB_TOKEN` | — | Lifts GitHub's 60-requests-per-hour unauthenticated limit, which serverless functions share across a region. The 5-minute edge cache normally keeps usage far below it, so this is only worth adding if you see `502`s from `/api/release`. |
 | `KV_REST_API_URL` | — | Set for you by the Upstash integration. |

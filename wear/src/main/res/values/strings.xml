@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicSM</string>
+    <string name="app_name">Hymn</string>
     <string name="nothing_playing">Nothing playing</string>
     <string name="open_on_phone">Open on phone</string>
     <string name="cd_play_pause">Play or pause</string>

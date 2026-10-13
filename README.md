@@ -1,8 +1,9 @@
-# MusicSM
+coilot
+# Hymn
 
 **v3.0.3** — A dark, glassmorphic music‑streaming app for Android. Real audio streamed from YouTube via NewPipeExtractor and played through AndroidX Media3, wrapped in a Jetpack Compose UI inspired by an aurora‑glass design language (coral accent, Plus Jakarta Sans). Also plays music stored on your device.
 
-> **Not shippable to Google Play.** MusicSM streams from YouTube and depends on GPLv3 `NewPipeExtractor`; it is a personal / educational project, not a distributable product.
+> **Not shippable to Google Play.** Hymn streams from YouTube and depends on GPLv3 `NewPipeExtractor`; it is a personal / educational project, not a distributable product.
 
 ---
 
@@ -33,10 +34,10 @@
 - Frame‑interpolated position so the seek bar and live synced lyrics stay smooth.
 - **Word‑by‑word lyrics** from eight sources (Apple Music, BiniLyrics, LyricsPlus, SimpMusic, LRCLIB, KuGou, Unison, YouTube Music), reorderable in Settings; lyrics on a music video **sync themselves** to it by lining its audio up with the album version (or tap **Sync now**); share selected lines as an image card.
 - **Resilient streaming** — an expired or rejected stream URL is re‑resolved on the fly, and a track that still fails is skipped rather than stalling playback. Age‑restricted videos play from the song's official audio version.
-- **Optional Google sign‑in** — if YouTube blocks anonymous playback on your network ("Sign in to confirm you're not a bot"), MusicSM asks you to sign in on Google's own page and keeps playing through your account. Only YouTube's session cookies are kept, on the device and out of backups. Manage it in **Settings → YouTube account**, where you can also turn on **Personalise with my YouTube account**: Home, radio and recommendations from your YouTube Music taste and history, plus your YouTube Music playlists (Liked music included) and artists in the Library. Read‑only; nothing is written to your account.
+- **Optional Google sign‑in** — if YouTube blocks anonymous playback on your network ("Sign in to confirm you're not a bot"), Hymn asks you to sign in on Google's own page and keeps playing through your account. Only YouTube's session cookies are kept, on the device and out of backups. Manage it in **Settings → YouTube account**, where you can also turn on **Personalise with my YouTube account**: Home, radio and recommendations from your YouTube Music taste and history, plus your YouTube Music playlists (Liked music included) and artists in the Library. Read‑only; nothing is written to your account.
 
 **Beyond the phone**
-- **Android Auto** (browse + play), a **Wear OS** app (controls, voice search, lyrics, always‑on screen), a **home‑screen widget**, a **Quick Settings tile**, deep links / "Open with" & "Share to MusicSM" for YouTube links, and voice "play … on MusicSM".
+- **Android Auto** (browse + play), a **Wear OS** app (controls, voice search, lyrics, always‑on screen), a **home‑screen widget**, a **Quick Settings tile**, deep links / "Open with" & "Share to Hymn" for YouTube links, and voice "play … on Hymn".
 
 **Now Playing** — blurred artwork backdrop, breathing album art, **animated cover videos** (in the album card, borderless across the top Apple Music style, or full screen), hue‑cycling frosted‑glass play/pause button, animated multi‑hue seek bar, glassy album‑tinted volume, an **audio output picker**, track details, queue, and live lyrics with **per‑song sync adjustment**.
 

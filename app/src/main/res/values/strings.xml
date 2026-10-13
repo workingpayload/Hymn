@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicSM</string>
+    <string name="app_name">Hymn</string>
 
     <!-- Shared actions and content descriptions -->
     <string name="action_back">Back</string>
@@ -68,7 +68,7 @@
     <string name="library_title">Library</string>
     <string name="library_import_playlist">Import playlist</string>
     <string name="library_scan_code">Scan playlist code</string>
-    <string name="scan_unknown_code">That\'s not a MusicSM playlist code.</string>
+    <string name="scan_unknown_code">That\'s not a Hymn playlist code.</string>
     <string name="scan_unavailable">Scanning needs Google Play services. Ask for the link instead.</string>
     <string name="library_new_playlist">New playlist</string>
     <string name="library_liked_songs">Liked Songs</string>
@@ -127,8 +127,8 @@
     <!-- Queue -->
     <string name="queue_title">Queue</string>
     <string name="queue_empty_title">Queue is empty</string>
-    <string name="deeplink_not_a_track">That link isn\'t a YouTube track MusicSM can play</string>
-    <string name="deeplink_unsupported_youtube_link">MusicSM can only open YouTube track and playlist links</string>
+    <string name="deeplink_not_a_track">That link isn\'t a YouTube track Hymn can play</string>
+    <string name="deeplink_unsupported_youtube_link">Hymn can only open YouTube track and playlist links</string>
     <string name="queue_empty_subtitle">Play something, or add tracks with \u201CAdd to queue\u201D.</string>
     <string name="queue_drag_to_reorder">Drag to reorder</string>
     <string name="queue_remove_from">Remove from queue</string>
@@ -227,7 +227,7 @@
     <string name="settings_section_about">About</string>
     <string name="settings_version">Version %1$s</string>
     <string name="settings_language_title">App language</string>
-    <string name="settings_language_subtitle">Choose the language MusicSM uses</string>
+    <string name="settings_language_subtitle">Choose the language Hymn uses</string>
     <plurals name="track_count">
         <item quantity="one">%d track</item>
         <item quantity="other">%d tracks</item>
@@ -267,7 +267,7 @@
     <string name="share_song_chooser">Share song</string>
 
     <!-- Browse tree (Android Auto / Wear) -->
-    <string name="browse_root">MusicSM</string>
+    <string name="browse_root">Hymn</string>
     <string name="browse_liked">Liked songs</string>
     <string name="browse_downloads">Downloads</string>
     <string name="browse_recent">Recently played</string>
@@ -282,10 +282,10 @@
     <string name="shortcut_search_long">Search music</string>
 
     <!-- Widget and Quick Settings tile -->
-    <string name="widget_description">Control MusicSM playback from your home screen.</string>
+    <string name="widget_description">Control Hymn playback from your home screen.</string>
     <string name="widget_empty_title">Nothing playing</string>
-    <string name="widget_empty_subtitle">Tap to open MusicSM</string>
-    <string name="tile_label">MusicSM</string>
+    <string name="widget_empty_subtitle">Tap to open Hymn</string>
+    <string name="tile_label">Hymn</string>
 
     <string name="cd_artwork">Album art</string>
     <string name="cd_play_pause">Play or pause</string>
@@ -408,12 +408,12 @@
     <!-- Playlist sharing (QR / link) -->
     <string name="share_playlist">Share playlist</string>
     <string name="share_playlist_chooser">Share playlist via</string>
-    <string name="share_playlist_scan_hint">Scan this from Library → Scan playlist code in MusicSM. The whole track list is inside the code — no account or internet needed to read it.</string>
+    <string name="share_playlist_scan_hint">Scan this from Library → Scan playlist code in Hymn. The whole track list is inside the code — no account or internet needed to read it.</string>
     <string name="share_playlist_too_big">This playlist is too long to fit in a QR code. Send the link instead — it has no size limit.</string>
     <string name="share_playlist_send_link">Send link</string>
     <string name="share_playlist_copy_link">Copy link</string>
     <string name="share_playlist_copied">Link copied</string>
-    <string name="share_playlist_message">%1$s — open in MusicSM:\n%2$s</string>
+    <string name="share_playlist_message">%1$s — open in Hymn:\n%2$s</string>
     <plurals name="share_playlist_tracks">
         <item quantity="one">%d track</item>
         <item quantity="other">%d tracks</item>
@@ -429,6 +429,8 @@
     <string name="ambient_mode">Ambient mode</string>
     <string name="ambient_exit">Exit ambient mode</string>
     <string name="ambient_nothing_playing">Nothing playing</string>
+    <string name="ambient_show_cassette">Show cassette</string>
+    <string name="ambient_show_cover">Show cover art</string>
 
     <!-- Local music -->
     <string name="library_local_files">Local files</string>
@@ -442,8 +444,8 @@
 
     <!-- Buy me a Diet Coke -->
     <string name="settings_coffee_title">Buy me a Diet Coke</string>
-    <string name="settings_coffee_subtitle">Enjoying MusicSM? Support development 🥤</string>
-    <string name="coffee_lede">If MusicSM earned a spot on your phone, send a Diet Coke over UPI — pick your app.</string>
+    <string name="settings_coffee_subtitle">Enjoying Hymn? Support development 🥤</string>
+    <string name="coffee_lede">If Hymn earned a spot on your phone, send a Diet Coke over UPI — pick your app.</string>
     <string name="coffee_upi_label">UPI ID</string>
     <string name="coffee_copy">Copy</string>
     <string name="coffee_copied">UPI ID copied</string>
@@ -456,7 +458,7 @@
 
     <!-- In-app updates -->
     <string name="update_available_title">Update available</string>
-    <string name="update_available_body">MusicSM %1$s is available. You’re on %2$s.</string>
+    <string name="update_available_body">Hymn %1$s is available. You’re on %2$s.</string>
     <string name="update_now">Update</string>
     <string name="update_later">Later</string>
     <string name="update_downloading">Downloading update…</string>
@@ -465,6 +467,13 @@
     <string name="update_checking">Checking for updates…</string>
     <string name="update_up_to_date">You’re on the latest version</string>
     <string name="update_failed">Couldn’t check for updates</string>
+
+    <!-- One-time "MusicSM is now Hymn" intro after updating -->
+    <string name="hymn_intro_old_name" translatable="false">MusicSM</string>
+    <string name="hymn_intro_label">A new name</string>
+    <string name="hymn_intro_title">MusicSM is now Hymn</string>
+    <string name="hymn_intro_body">Same app, same library, same music. Just a new name.</string>
+    <string name="hymn_intro_cta">Let’s listen</string>
 
     <!-- Backup &amp; restore -->
     <string name="settings_section_backup">Backup &amp; restore</string>
@@ -477,7 +486,7 @@
     <string name="backup_success">Backup saved</string>
     <string name="backup_failed">Backup failed</string>
     <string name="restore_success">Restored %1$d songs and %2$d playlists</string>
-    <string name="restore_failed">Couldn\'t restore: not a valid MusicSM backup</string>
+    <string name="restore_failed">Couldn\'t restore: not a valid Hymn backup</string>
 
     <!-- Lyrics sync -->
     <string name="lyrics_sync">Sync lyrics</string>

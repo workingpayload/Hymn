@@ -1,5 +1,23 @@
 # Release notes
 
+## v3.0.3 — 2026-10-10
+
+MusicSM is now **Hymn**. Artwork now blends with the music during crossfade and Mix transitions.
+
+### New name
+- **MusicSM is now Hymn.** The launcher, widget, Quick Settings tile, Android Auto, notifications, share text and backups use the new name. It is the same app: it updates in place, and your library, settings, downloads, backups and shared playlist links keep working.
+
+### Improvements
+- **Artwork follows the blend** — the next song's cover fades in as its audio comes in, across Now Playing, the mini player and Ambient mode. The animation follows playback position and pauses with the music.
+- **Matching backgrounds and colours** — Now Playing's blurred backdrop and accent tint, plus Ambient's artwork, background wash and glow/aurora colours, blend towards the next song too. In the **Top** artwork style, the outgoing animated cover fades away as the next cover appears.
+- **Smoother visual handoffs** — the incoming cover only fades in once it has loaded. Cancelling a transition eases back to the current cover; completing one briefly holds the incoming cover while the normal track-change animations catch up.
+
+### Notes
+- Uses your existing crossfade and Mix settings; no new switch is needed.
+- The watch app is unchanged apart from its name, which changes with its next build; v3.0.0 on the watch works with v3.0.3 on the phone.
+- No database change (still schema v6), so your library carries over untouched.
+- Still not Play-shippable (GPLv3 NewPipeExtractor + YouTube ToS); for personal / educational use.
+
 ## v3.0.2 — 2026-10-04
 
 Keeps music playing when YouTube asks to "confirm you're not a bot", and can optionally personalise MusicSM with your YouTube Music account.

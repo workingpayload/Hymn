@@ -128,6 +128,12 @@ class PlayerViewModel @Inject constructor(
             MotionArtStyle.fromKey(preferences.animatedArtworkStyleNow),
         )
 
+    /** Ambient mode shows a playing cassette tape instead of the cover art. */
+    val ambientCassette: StateFlow<Boolean> = preferences.ambientCassette
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), preferences.ambientCassetteNow)
+
+    fun setAmbientCassette(enabled: Boolean) = preferences.setAmbientCassette(enabled)
+
     /** Per-track lyric timing correction, applied immediately to synced lyric highlighting. */
     val lyricsOffsetMs: StateFlow<Long> = controller.state
         .map { it.currentSong?.id }
@@ -304,7 +310,7 @@ class PlayerViewModel @Inject constructor(
         return true
     }
 
-    /** Voice search ("play X on MusicSM"): play the best match for [query]. */
+    /** Voice search ("play X on Hymn"): play the best match for [query]. */
     suspend fun searchAndPlay(query: String): Boolean {
         val song = runCatching { musicRepository.search(query).songs.firstOrNull() }.getOrNull()
             ?: return false

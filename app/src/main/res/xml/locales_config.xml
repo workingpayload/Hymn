@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Languages MusicSM ships translations for. Android uses this to populate the
-  per-app language picker (Settings > Apps > MusicSM > Language) on API 33+.
+  Languages Hymn ships translations for. Android uses this to populate the
+  per-app language picker (Settings > Apps > Hymn > Language) on API 33+.
   Add a locale here whenever a values-<lang>/strings.xml is added.
 -->
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">

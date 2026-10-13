@@ -36,7 +36,7 @@ class AppUpdater @Inject constructor(
         val request = Request.Builder()
             .url("https://api.github.com/repos/$REPO/releases/latest")
             .header("Accept", "application/vnd.github+json")
-            .header("User-Agent", "MusicSM")
+            .header("User-Agent", "Hymn")
             .build()
         runCatching {
             client.newCall(request).execute().use { response ->
@@ -69,9 +69,9 @@ class AppUpdater @Inject constructor(
         val ok = runCatching {
             val manager = context.getSystemService(DownloadManager::class.java)
                 ?: error("no DownloadManager")
-            val fileName = "MusicSM-${info.versionName}.apk"
+            val fileName = "Hymn-${info.versionName}.apk"
             val request = DownloadManager.Request(info.apkUrl.toUri())
-                .setTitle("MusicSM ${info.versionName}")
+                .setTitle("Hymn ${info.versionName}")
                 .setMimeType(APK_MIME)
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, fileName)
@@ -138,7 +138,7 @@ class AppUpdater @Inject constructor(
         version.split(Regex("[^0-9]+")).filter { it.isNotEmpty() }.map { it.toIntOrNull() ?: 0 }
 
     private companion object {
-        const val REPO = "workingpayload/MusicSM"
+        const val REPO = "workingpayload/Hymn"
         const val APK_MIME = "application/vnd.android.package-archive"
     }
 }

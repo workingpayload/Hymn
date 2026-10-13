@@ -524,7 +524,7 @@ fun SettingsScreen(
                         stringResource(R.string.settings_backup_subtitle)
                     },
                     onClick = if (backupBusy) null else {
-                        { backupLauncher.launch("musicsm-backup.json") }
+                        { backupLauncher.launch("hymn-backup.json") }
                     },
                 )
             }

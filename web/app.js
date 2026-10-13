@@ -6,7 +6,7 @@
  * downloads the app" rather than a broken page.
  */
 
-const RELEASES_URL = "https://github.com/workingpayload/MusicSM/releases";
+const RELEASES_URL = "https://github.com/workingpayload/Hymn/releases";
 
 const el = (id) => document.getElementById(id);
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -164,7 +164,7 @@ function renderWear(data) {
     button.target = "_blank";
     button.rel = "noopener noreferrer";
     button.title = "Not published yet — opens the releases page";
-    el("wear-meta").textContent = "MusicSM for Wear OS is coming soon.";
+    el("wear-meta").textContent = "Hymn for Wear OS is coming soon.";
     return;
   }
   button.href = build.href;
@@ -172,7 +172,7 @@ function renderWear(data) {
   button.title = size ? `${build.name} · ${size}` : build.name;
   const released = formatDate(build.publishedAt);
   el("wear-meta").textContent = [
-    `MusicSM for Wear OS ${build.version}`,
+    `Hymn for Wear OS ${build.version}`,
     size,
     released && `released ${released}`,
     "Wear OS 3+",

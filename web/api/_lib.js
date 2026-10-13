@@ -15,7 +15,7 @@
 const KV_URL = process.env.KV_REST_API_URL;
 const KV_TOKEN = process.env.KV_REST_API_TOKEN;
 
-export const REPO = process.env.GITHUB_REPO || 'workingpayload/MusicSM';
+export const REPO = process.env.GITHUB_REPO || 'workingpayload/Hymn';
 export const COUNTER_KEY = 'musicsm:downloads:total';
 
 // MusicSM Desktop ships from its own repo. Its installers' downloads are added to the GitHub total,
