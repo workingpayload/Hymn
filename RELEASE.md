@@ -1,11 +1,22 @@
 # Release notes
 
-## v3.0.3 — 2026-10-10
+## v4.0.0 — 2026-10-14
 
-MusicSM is now **Hymn**. Artwork now blends with the music during crossfade and Mix transitions.
+MusicSM is now **Hymn**.
 
 ### New name
 - **MusicSM is now Hymn.** The launcher, widget, Quick Settings tile, Android Auto, notifications, share text and backups use the new name. It is the same app: it updates in place, and your library, settings, downloads, backups and shared playlist links keep working.
+- **A short welcome.** After updating, a one-time animation shows the old name giving way to the new one. Tap to skip it. New installs go straight to the app.
+- **New home on GitHub.** The project now lives at [workingpayload/Hymn](https://github.com/workingpayload/Hymn). Old MusicSM links still redirect there, and in-app updates keep working.
+
+### Notes
+- The watch app is now Hymn too (v4.0.0). Update both phone and watch.
+- No database change (still schema v6), so your library carries over untouched.
+- Still not Play-shippable (GPLv3 NewPipeExtractor + YouTube ToS); for personal / educational use.
+
+## v3.0.3 — 2026-10-10
+
+Artwork now blends with the music during crossfade and Mix transitions.
 
 ### Improvements
 - **Artwork follows the blend** — the next song's cover fades in as its audio comes in, across Now Playing, the mini player and Ambient mode. The animation follows playback position and pauses with the music.
@@ -14,7 +25,7 @@ MusicSM is now **Hymn**. Artwork now blends with the music during crossfade and 
 
 ### Notes
 - Uses your existing crossfade and Mix settings; no new switch is needed.
-- The watch app is unchanged apart from its name, which changes with its next build; v3.0.0 on the watch works with v3.0.3 on the phone.
+- The watch app is unchanged; v3.0.0 on the watch works with v3.0.3 on the phone.
 - No database change (still schema v6), so your library carries over untouched.
 - Still not Play-shippable (GPLv3 NewPipeExtractor + YouTube ToS); for personal / educational use.
 

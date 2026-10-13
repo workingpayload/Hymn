@@ -17,8 +17,8 @@ android {
         applicationId = "com.example.musicsm"
         minSdk = 30
         targetSdk = 37
-        versionCode = 4
-        versionName = "3.0.0"
+        versionCode = 5
+        versionName = "4.0.0"
     }
 
     buildTypes {
