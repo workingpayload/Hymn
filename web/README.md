@@ -94,9 +94,9 @@ it in the browser, and `.gitattributes` keeps it LF, since a CRLF script breaks 
 stays hidden until there is a Mac build.
 
 **Microsoft Store (Windows).** MusicSM Desktop is also on the
-[Microsoft Store](https://apps.microsoft.com/detail/xpffd9p6njshh5) (product id `XPFFD9P6NJSHH5`).
+[Microsoft Store](https://apps.microsoft.com/detail/9NNT6LVGQH28?hl=en-us&gl=IN&ocid=pdpshare) (product id `9NNT6LVGQH28`).
 The desktop row has a **Get it from Microsoft Store** button, and the page offers
-`winget install --id XPFFD9P6NJSHH5 --source msstore` with a Copy button. Store builds are signed
+`winget install --id 9NNT6LVGQH28 --source msstore` with a Copy button. Store builds are signed
 and update themselves, so there's no SmartScreen prompt. Store installs go through Microsoft, not
 `/api/download`, so they aren't in the GitHub or page counts. Both stay visible even before there is
 a GitHub desktop build.
