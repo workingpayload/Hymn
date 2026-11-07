@@ -29,7 +29,18 @@ data class AlbumDetailUiState(
     val songs: List<Song> = emptyList(),
     val loading: Boolean = true,
     val error: String? = null,
+    /** A YouTube (Music) playlist shown on this screen rather than an album; it loops when played. */
+    val isPlaylist: Boolean = false,
 )
+
+/**
+ * Whether an id on the album route is a playlist. Albums arrive as `MPREb_…` browse ids or their
+ * `OLAK5uy_…` album playlists; anything else (`VL…`, `PL…`, `RD…`, `LM`) is a real playlist.
+ */
+internal fun isRemotePlaylistId(id: String): Boolean {
+    val text = id.trim()
+    return text.isNotEmpty() && !text.contains("MPREb") && !text.contains("OLAK5")
+}
 
 @HiltViewModel
 class AlbumDetailViewModel @Inject constructor(
@@ -78,6 +89,7 @@ class AlbumDetailViewModel @Inject constructor(
                         year = album.year,
                         songs = songs,
                         loading = false,
+                        isPlaylist = isRemotePlaylistId(albumId),
                     )
                 }
                 .onFailure {

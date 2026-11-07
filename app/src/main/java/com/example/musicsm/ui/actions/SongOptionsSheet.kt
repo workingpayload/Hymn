@@ -302,8 +302,12 @@ private fun SmallSpinner() {
 }
 
 @Composable
-private fun NewPlaylistDialog(onCreate: (String) -> Unit, onDismiss: () -> Unit) {
-    var name by remember { mutableStateOf("") }
+internal fun NewPlaylistDialog(
+    onCreate: (String) -> Unit,
+    onDismiss: () -> Unit,
+    initialName: String = "",
+) {
+    var name by remember { mutableStateOf(initialName) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.library_new_playlist)) },

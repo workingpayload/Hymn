@@ -132,6 +132,12 @@
     <string name="queue_empty_subtitle">Play something, or add tracks with \u201CAdd to queue\u201D.</string>
     <string name="queue_drag_to_reorder">Drag to reorder</string>
     <string name="queue_remove_from">Remove from queue</string>
+    <string name="queue_save_as_playlist">Save queue as playlist</string>
+    <string name="queue_default_playlist_name">Queue · %1$s</string>
+    <plurals name="queue_saved_as_playlist">
+        <item quantity="one">Saved %1$d song to \u201C%2$s\u201D</item>
+        <item quantity="other">Saved %1$d songs to \u201C%2$s\u201D</item>
+    </plurals>
 
     <!-- Lyrics -->
     <string name="lyrics_title">Live Lyrics</string>
@@ -197,6 +203,8 @@
     <string name="settings_resume_subtitle">Restore the queue and position when the app reopens</string>
     <string name="settings_autoplay_title">Autoplay similar songs</string>
     <string name="settings_autoplay_subtitle">Keep playing related tracks when the queue runs out</string>
+    <string name="settings_loop_playlists_title">Loop playlists</string>
+    <string name="settings_loop_playlists_subtitle">Start a playlist again from the top when it ends</string>
     <string name="settings_skip_silence_title">Skip silence</string>
     <string name="settings_skip_silence_subtitle">Shorten silent gaps in a track</string>
     <string name="settings_fade_out_title">Fade out on sleep timer</string>
@@ -445,7 +453,7 @@
     <!-- Buy me a Diet Coke -->
     <string name="settings_coffee_title">Buy me a Diet Coke</string>
     <string name="settings_coffee_subtitle">Enjoying Hymn? Support development 🥤</string>
-    <string name="coffee_lede">If Hymn earned a spot on your phone, send a Diet Coke over UPI — pick your app.</string>
+    <string name="coffee_lede">If Hymn earned a spot on your phone, send a Diet Coke over UPI — pick your app — or on Ko-fi.</string>
     <string name="coffee_upi_label">UPI ID</string>
     <string name="coffee_copy">Copy</string>
     <string name="coffee_copied">UPI ID copied</string>
@@ -455,6 +463,9 @@
     <string name="coffee_phonepe">PhonePe</string>
     <string name="coffee_paytm">Paytm</string>
     <string name="coffee_any">Any UPI app</string>
+    <string name="coffee_kofi_hint">Outside India? Card or PayPal:</string>
+    <string name="coffee_kofi">Support on Ko-fi</string>
+    <string name="coffee_no_browser">No browser found</string>
 
     <!-- In-app updates -->
     <string name="update_available_title">Update available</string>

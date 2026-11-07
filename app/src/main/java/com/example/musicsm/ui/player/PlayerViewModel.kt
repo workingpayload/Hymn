@@ -2,6 +2,7 @@ package com.example.musicsm.ui.player
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.Player
 import com.example.motionart.MotionArt
 import com.example.musicsm.domain.model.Lyrics
 import com.example.musicsm.domain.model.LyricsSyncResult
@@ -161,7 +162,19 @@ class PlayerViewModel @Inject constructor(
     /** Stops two top-ups racing when several player events land close together. */
     private var extending = false
 
+    /**
+     * True while repeat-all is on only because a playlist was started (see [applyPlaylistLoop]),
+     * so it can be undone for the next non-playlist queue without overriding a listener's choice.
+     */
+    private var loopingPlaylist = false
+
     init {
+        // Turning "Loop playlists" off stops the loop it started.
+        viewModelScope.launch {
+            preferences.loopPlaylists.distinctUntilChanged().collect { enabled ->
+                if (!enabled && loopingPlaylist) applyPlaylistLoop(isPlaylist = false)
+            }
+        }
         // Fetch lyrics whenever the current track changes.
         viewModelScope.launch {
             controller.state
@@ -278,10 +291,31 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
-    /** Play a list of songs starting at [startIndex] (e.g. an album, playlist, or search list). */
-    fun play(songs: List<Song>, startIndex: Int = 0) {
+    /**
+     * Play a list of songs starting at [startIndex] (e.g. an album, playlist, or search list).
+     * A [isPlaylist] queue starts again from the top when it ends, while "Loop playlists" is on.
+     */
+    fun play(songs: List<Song>, startIndex: Int = 0, isPlaylist: Boolean = false) {
         radioActive.value = false
+        applyPlaylistLoop(isPlaylist)
         controller.playSongs(songs, startIndex)
+    }
+
+    /**
+     * Repeat-all for playlists, through the player itself so crossfade/gapless carry on across the
+     * wrap. Only an OFF repeat is upgraded, and only the loop this class set is ever turned off.
+     */
+    private fun applyPlaylistLoop(isPlaylist: Boolean) {
+        val mode = controller.repeatModeNow
+        if (isPlaylist && preferences.loopPlaylistsNow) {
+            if (mode == Player.REPEAT_MODE_OFF) {
+                controller.setRepeatMode(Player.REPEAT_MODE_ALL)
+                loopingPlaylist = true
+            }
+        } else if (loopingPlaylist) {
+            if (mode == Player.REPEAT_MODE_ALL) controller.setRepeatMode(Player.REPEAT_MODE_OFF)
+            loopingPlaylist = false
+        }
     }
 
     /**
@@ -291,6 +325,7 @@ class PlayerViewModel @Inject constructor(
      * wait to hear something is one stream resolution rather than a whole recommendation fan-out.
      */
     fun playWithRadio(song: Song) {
+        applyPlaylistLoop(isPlaylist = false)
         controller.playSongs(listOf(song))
         radioActive.value = true
         viewModelScope.launch {
@@ -420,14 +455,18 @@ class PlayerViewModel @Inject constructor(
     fun toggleShuffle() = controller.toggleShuffle()
 
     /** Shuffle-play a list. Turns shuffle *on* (never off) and starts on a random track. */
-    fun shufflePlay(songs: List<Song>) {
+    fun shufflePlay(songs: List<Song>, isPlaylist: Boolean = false) {
         if (songs.isEmpty()) return
         radioActive.value = false
+        applyPlaylistLoop(isPlaylist)
         controller.setShuffle(true)
         controller.playSongs(songs, songs.indices.random())
     }
     fun setShuffle(enabled: Boolean) = controller.setShuffle(enabled)
-    fun cycleRepeat() = controller.cycleRepeat()
+    fun cycleRepeat() {
+        loopingPlaylist = false
+        controller.cycleRepeat()
+    }
     fun addToQueue(song: Song) = controller.addToQueue(song)
     fun playNext(song: Song) = controller.playNext(song)
     fun moveQueueItem(from: Int, to: Int) = controller.moveItem(from, to)

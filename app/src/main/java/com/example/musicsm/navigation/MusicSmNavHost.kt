@@ -141,7 +141,7 @@ fun MusicSmNavHost(
                         popUpTo(Routes.SHARED_PLAYLIST) { inclusive = true }
                     }
                 },
-                onPlay = { songs, index -> playerViewModel.play(songs, index) },
+                onPlay = { songs, index -> playerViewModel.play(songs, index, isPlaylist = true) },
             )
         }
         composable(

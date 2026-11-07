@@ -81,6 +81,15 @@ class LibraryViewModel @Inject constructor(
         }
     }
 
+    /** New playlist holding [songs] in order; repeats (e.g. a song queued twice) are kept once. */
+    fun createPlaylistWithSongs(name: String, songs: List<Song>) {
+        if (name.isBlank() || songs.isEmpty()) return
+        viewModelScope.launch {
+            val id = repository.createPlaylist(name.trim())
+            songs.distinctBy { it.id }.forEach { repository.addToPlaylist(id, it) }
+        }
+    }
+
     fun isLiked(songId: String): Flow<Boolean> = repository.isLiked(songId)
 
     fun toggleLike(song: Song) {

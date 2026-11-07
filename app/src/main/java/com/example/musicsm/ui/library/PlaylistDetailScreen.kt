@@ -215,7 +215,7 @@ fun PlaylistDetailScreen(
                 ) {
                     Surface(
                         onClick = {
-                            if (ui.songs.isNotEmpty()) playerViewModel.shufflePlay(ui.songs)
+                            if (ui.songs.isNotEmpty()) playerViewModel.shufflePlay(ui.songs, isPlaylist = true)
                         },
                         color = Color.Transparent,
                     ) {
@@ -223,7 +223,7 @@ fun PlaylistDetailScreen(
                     }
                     Spacer(Modifier.weight(1f))
                     Surface(
-                        onClick = { if (ui.songs.isNotEmpty()) playerViewModel.play(ui.songs, 0) },
+                        onClick = { if (ui.songs.isNotEmpty()) playerViewModel.play(ui.songs, 0, isPlaylist = true) },
                         shape = androidx.compose.foundation.shape.CircleShape,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(56.dp),
@@ -249,7 +249,7 @@ fun PlaylistDetailScreen(
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                         SongRow(
                             song = song,
-                            onClick = { playerViewModel.play(ui.songs, index) },
+                            onClick = { playerViewModel.play(ui.songs, index, isPlaylist = true) },
                             onMore = { optionsSong = song },
                             modifier = Modifier.weight(1f),
                         )

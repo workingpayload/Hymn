@@ -81,6 +81,11 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
     val autoplayRadioNow: Boolean get() = prefs.getBoolean(KEY_AUTOPLAY, false)
     fun setAutoplayRadio(value: Boolean) = prefs.edit().putBoolean(KEY_AUTOPLAY, value).apply()
 
+    /** Playlists start again from the top when they end (repeat-all while one plays). */
+    val loopPlaylists: Flow<Boolean> get() = watch(KEY_LOOP_PLAYLISTS) { loopPlaylistsNow }
+    val loopPlaylistsNow: Boolean get() = prefs.getBoolean(KEY_LOOP_PLAYLISTS, true)
+    fun setLoopPlaylists(value: Boolean) = prefs.edit().putBoolean(KEY_LOOP_PLAYLISTS, value).apply()
+
     /** Fade the volume down over the last few seconds before the sleep timer pauses playback. */
     val sleepTimerFadeOut: Flow<Boolean> get() = watch(KEY_SLEEP_FADE) { sleepTimerFadeOutNow }
     val sleepTimerFadeOutNow: Boolean get() = prefs.getBoolean(KEY_SLEEP_FADE, true)
@@ -622,6 +627,7 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
         private const val KEY_RESTORE_QUEUE = "restore_queue"
         private const val KEY_SKIP_SILENCE = "skip_silence"
         private const val KEY_AUTOPLAY = "autoplay_radio"
+        private const val KEY_LOOP_PLAYLISTS = "loop_playlists"
         private const val KEY_SLEEP_FADE = "sleep_timer_fade"
         private const val KEY_SPEED = "playback_speed"
         private const val KEY_CROSSFADE = "crossfade_ms"
@@ -660,7 +666,7 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
          */
         private val BACKUP_KEYS = setOf(
             KEY_THEME_MODE, KEY_AMOLED, KEY_MATERIAL_YOU, KEY_ACCENT, KEY_ARTWORK_THEME, KEY_MINIMIZE_BAR,
-            KEY_RESTORE_QUEUE, KEY_SKIP_SILENCE, KEY_AUTOPLAY, KEY_SLEEP_FADE, KEY_SPEED,
+            KEY_RESTORE_QUEUE, KEY_SKIP_SILENCE, KEY_AUTOPLAY, KEY_LOOP_PLAYLISTS, KEY_SLEEP_FADE, KEY_SPEED,
             KEY_CROSSFADE, KEY_FX_ENABLED, KEY_FX_PRESET, KEY_FX_BANDS, KEY_FX_BASS,
             KEY_FX_VIRTUALIZER, KEY_FX_LOUDNESS, KEY_WIFI_ONLY, KEY_SORT_PLAYLIST,
             KEY_SORT_DOWNLOADS, KEY_RECENT_SEARCHES, KEY_LYRICS_OFFSETS,

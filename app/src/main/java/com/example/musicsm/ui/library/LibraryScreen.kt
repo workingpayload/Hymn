@@ -173,7 +173,7 @@ fun LibraryScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 FilledChip(stringResource(R.string.library_shuffle_all), Icons.Filled.Shuffle, filled = true) {
-                    playerViewModel.shufflePlay(liked)
+                    playerViewModel.shufflePlay(liked, isPlaylist = true)
                 }
                 FilledChip(stringResource(R.string.library_favorites_mix), Icons.Filled.Favorite, filled = false, onClick = onOpenLiked)
             }

@@ -1,11 +1,13 @@
 package com.example.musicsm.ui.player
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DragHandle
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,21 +37,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.musicsm.R
 import com.example.musicsm.domain.model.Song
+import com.example.musicsm.ui.actions.NewPlaylistDialog
 import com.example.musicsm.ui.actions.SongExtraAction
 import com.example.musicsm.ui.actions.SongOptionsSheet
 import com.example.musicsm.ui.components.EmptyState
 import com.example.musicsm.ui.components.SongRow
+import com.example.musicsm.ui.library.LibraryViewModel
 import com.example.musicsm.ui.theme.AppBackground
 import com.example.musicsm.ui.theme.OnDarkVariant
 import com.example.musicsm.ui.theme.OverlayTint
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.roundToInt
 
 /** Fixed row height, so a drag distance maps cleanly onto a number of positions moved. */
@@ -59,9 +69,12 @@ fun QueueScreen(
     viewModel: PlayerViewModel,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    libraryViewModel: LibraryViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     var options by remember { mutableStateOf<QueueSelection?>(null) }
+    var showSave by remember { mutableStateOf(false) }
 
     val rowHeightPx = with(LocalDensity.current) { RowHeight.toPx() }
     // Index currently being dragged (-1 = none) and its live pixel offset.
@@ -89,6 +102,16 @@ fun QueueScreen(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
             )
+            Spacer(Modifier.weight(1f))
+            if (state.queue.isNotEmpty()) {
+                IconButton(onClick = { showSave = true }) {
+                    Icon(
+                        Icons.Filled.PlaylistAdd,
+                        contentDescription = stringResource(R.string.queue_save_as_playlist),
+                        tint = MaterialTheme.colorScheme.onBackground,
+                    )
+                }
+            }
         }
 
         if (state.queue.isEmpty()) {
@@ -157,6 +180,28 @@ fun QueueScreen(
                 }
             }
         }
+    }
+
+    if (showSave) {
+        val defaultName = stringResource(
+            R.string.queue_default_playlist_name,
+            remember { SimpleDateFormat("d MMM, HH:mm", Locale.getDefault()).format(Date()) },
+        )
+        NewPlaylistDialog(
+            initialName = defaultName,
+            onCreate = { name ->
+                // Snapshot now: the queue may move on while the dialog was open.
+                val songs = state.queue.distinctBy { it.id }
+                libraryViewModel.createPlaylistWithSongs(name, songs)
+                showSave = false
+                Toast.makeText(
+                    context,
+                    context.resources.getQuantityString(R.plurals.queue_saved_as_playlist, songs.size, songs.size, name.trim()),
+                    Toast.LENGTH_SHORT,
+                ).show()
+            },
+            onDismiss = { showSave = false },
+        )
     }
 
     options?.let { selection ->

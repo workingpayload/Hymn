@@ -998,3 +998,20 @@ footer a:hover {
   border-color: transparent;
   color: #fff;
 }
+.support-kofi-hint {
+  margin: 18px 0 10px;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+/* An <a> styled like the UPI buttons; it opens Ko-fi in a new tab rather than deep-linking. */
+.kofi-btn {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background: #ff5e5b;
+  border-color: transparent;
+  color: #fff;
+}
+.kofi-btn:hover {
+  background: #ff7370;
+}

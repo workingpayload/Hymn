@@ -1,5 +1,19 @@
 # Release notes
 
+## v4.1.0 — 2026-11-08
+
+Save any queue as a playlist, playlists that keep going, and Ko-fi support.
+
+### New
+- **Save queue as playlist.** A new button in the Queue saves whatever is queued (a radio, a mix, a search session) as a playlist. It's named after when you saved it; rename it before saving if you like. A song queued twice is added once.
+- **Loop playlists.** A playlist now starts again from the top when it ends, instead of stopping. Works for your playlists, Liked Songs, shared playlists and YouTube playlists; albums still end as before. Crossfade and Mix carry on across the wrap. Turn it off in **Settings → Loop playlists**.
+- **Ko-fi.** "Buy me a coffee" in Settings (and on the website) now has a **Support on Ko-fi** button too, for card or PayPal from outside India.
+
+### Notes
+- The watch app is unchanged; v4.0.0 on the watch works with v4.1.0 on the phone.
+- No database change (still schema v6), so your library carries over untouched.
+- Still not Play-shippable (GPLv3 NewPipeExtractor + YouTube ToS); for personal / educational use.
+
 ## v4.0.0 — 2026-10-14
 
 MusicSM is now **Hymn**.

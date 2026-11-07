@@ -352,7 +352,7 @@ function setupSupport() {
     if (event.target === dialog) closeDialog();
   });
 
-  dialog.querySelectorAll(".app-btn").forEach((btn) => {
+  dialog.querySelectorAll(".app-btn[data-app]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const url = schemes[btn.dataset.app] || schemes.any;
       window.location.href = url;

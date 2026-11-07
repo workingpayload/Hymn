@@ -21,4 +21,14 @@ class AlbumDetailTextTest {
         assertEquals("Neon Fields", resolvedAlbumDetailArtist("UCfixtureArtist", songs, "Night Drive"))
         assertEquals("Night Drive", resolvedAlbumDetailArtist("MPREb_fixture01", emptyList(), "Night Drive"))
     }
+
+    @Test
+    fun `only real playlists on the album route count as playlists`() {
+        assertEquals(false, isRemotePlaylistId("MPREb_fixture01"))
+        assertEquals(false, isRemotePlaylistId("OLAK5uy_fixture000"))
+        assertEquals(false, isRemotePlaylistId("https://music.youtube.com/playlist?list=OLAK5uy_fixture"))
+        assertEquals(true, isRemotePlaylistId("VLPLfixturePlaylist"))
+        assertEquals(true, isRemotePlaylistId("RDCLAK5uy_fixture"))
+        assertEquals(false, isRemotePlaylistId(""))
+    }
 }

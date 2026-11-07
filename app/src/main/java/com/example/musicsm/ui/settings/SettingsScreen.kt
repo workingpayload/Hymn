@@ -65,6 +65,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -126,6 +127,7 @@ fun SettingsScreen(
     val recentSearchCount by viewModel.recentSearchCount.collectAsStateWithLifecycle()
     val minimizeBarOnScroll by viewModel.minimizeBarOnScroll.collectAsStateWithLifecycle()
     val searchVideos by viewModel.searchVideos.collectAsStateWithLifecycle()
+    val loopPlaylists by viewModel.loopPlaylists.collectAsStateWithLifecycle()
     val cacheSongs by viewModel.cacheSongs.collectAsStateWithLifecycle()
     val cacheLimitMb by viewModel.cacheLimitMb.collectAsStateWithLifecycle()
     val cacheBytes by viewModel.cacheBytes.collectAsStateWithLifecycle()
@@ -213,6 +215,14 @@ fun SettingsScreen(
                     subtitle = stringResource(R.string.settings_autoplay_subtitle),
                     checked = ui.autoplayRadio,
                     onCheckedChange = viewModel::setAutoplayRadio,
+                )
+            }
+            item {
+                SettingsSwitch(
+                    title = stringResource(R.string.settings_loop_playlists_title),
+                    subtitle = stringResource(R.string.settings_loop_playlists_subtitle),
+                    checked = loopPlaylists,
+                    onCheckedChange = viewModel::setLoopPlaylists,
                 )
             }
             item {
@@ -736,6 +746,22 @@ private fun SupportDialog(onDismiss: () -> Unit) {
                 Spacer(Modifier.height(16.dp))
                 Text(stringResource(R.string.coffee_upi_label), style = MaterialTheme.typography.labelMedium, color = Coral)
                 Text(UPI_VPA, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold, color = OnDark)
+                Spacer(Modifier.height(16.dp))
+                Text(stringResource(R.string.coffee_kofi_hint), style = MaterialTheme.typography.bodyMedium, color = OnDarkVariant)
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.coffee_kofi),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(50))
+                        .background(Coral)
+                        .clickable { openKofi(context) }
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                )
             }
         },
         // Copy leaves the dialog open (you may still want to pick an app); Close dismisses it.
@@ -787,6 +813,16 @@ private fun launchUpi(context: Context, primary: String, params: String) {
 // Same payee as the Vercel landing page's support dialog.
 private const val UPI_VPA = "rs91963@pingpay"
 private const val UPI_NAME = "Raj"
+private const val KOFI_URL = "https://ko-fi.com/workingpayload"
+
+/** Ko-fi takes cards and PayPal, for supporters without UPI. */
+private fun openKofi(context: Context) {
+    runCatching {
+        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(KOFI_URL)))
+    }.onFailure {
+        Toast.makeText(context, context.getString(R.string.coffee_no_browser), Toast.LENGTH_SHORT).show()
+    }
+}
 
 /** Opens the system per-app language screen (Android 13+). */
 private fun openLanguageSettings(context: Context) {

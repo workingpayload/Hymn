@@ -1,6 +1,6 @@
 # Hymn
 
-**v4.0.0** — A dark, glassmorphic music‑streaming app for Android. Real audio streamed from YouTube via NewPipeExtractor and played through AndroidX Media3, wrapped in a Jetpack Compose UI inspired by an aurora‑glass design language (coral accent, Plus Jakarta Sans). Also plays music stored on your device.
+**v4.1.0** — A dark, glassmorphic music‑streaming app for Android. Real audio streamed from YouTube via NewPipeExtractor and played through AndroidX Media3, wrapped in a Jetpack Compose UI inspired by an aurora‑glass design language (coral accent, Plus Jakarta Sans). Also plays music stored on your device.
 
 > **Not shippable to Google Play.** Hymn streams from YouTube and depends on GPLv3 `NewPipeExtractor`; it is a personal / educational project, not a distributable product.
 
@@ -42,7 +42,7 @@
 
 **Liquid Glass navigation** — a floating glass tab bar you can **scrub with a finger** from tab to tab; it **minimises while you scroll**, tucking the mini player in between the current tab and Search. In landscape it becomes a glass **side dock**. Every list outside Home scrolls with an **iOS‑style bounce** at its ends.
 
-**Support** — a "Buy me a coffee" option at the top of Settings pays over **UPI** (Google Pay / PhonePe / Paytm / any UPI app) or copies the UPI ID.
+**Support** — a "Buy me a coffee" option at the top of Settings pays over **UPI** (Google Pay / PhonePe / Paytm / any UPI app), copies the UPI ID, or opens [Ko-fi](https://ko-fi.com/workingpayload) (card / PayPal).
 
 **In-app updates** — checks GitHub for a newer release on launch (and from **Settings → Check for updates**), then downloads the APK and opens the installer — no need to visit the releases page.
 

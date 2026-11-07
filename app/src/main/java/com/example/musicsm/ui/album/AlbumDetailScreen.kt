@@ -201,7 +201,7 @@ fun AlbumDetailScreen(
                             duration = formatDuration(song.durationMs),
                             isCurrent = isCurrent,
                             isPlaying = isCurrent && playerState.isPlaying,
-                            onClick = { playerViewModel.play(ui.songs, index) },
+                            onClick = { playerViewModel.play(ui.songs, index, isPlaylist = ui.isPlaylist) },
                             onLongClick = { optionsSong = song },
                             modifier = Modifier.padding(horizontal = 20.dp),
                         )
@@ -335,7 +335,7 @@ private fun ActionCluster(
                 labelColor = OnAccent,
                 background = Coral,
                 enabled = ui.songs.isNotEmpty(),
-                onClick = { playerViewModel.play(ui.songs, 0) },
+                onClick = { playerViewModel.play(ui.songs, 0, isPlaylist = ui.isPlaylist) },
             )
             PillButton(
                 modifier = Modifier.weight(1f),
@@ -345,7 +345,7 @@ private fun ActionCluster(
                 labelColor = MaterialTheme.colorScheme.onBackground,
                 background = SurfaceHighest.copy(alpha = 0.6f),
                 enabled = ui.songs.isNotEmpty(),
-                onClick = { playerViewModel.shufflePlay(ui.songs) },
+                onClick = { playerViewModel.shufflePlay(ui.songs, isPlaylist = ui.isPlaylist) },
             )
         }
         // Secondary actions on their own row.

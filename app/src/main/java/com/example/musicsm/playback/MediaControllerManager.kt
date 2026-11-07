@@ -227,6 +227,12 @@ class MediaControllerManager @Inject constructor(
         }
     }
 
+    val repeatModeNow: Int get() = controller?.repeatMode ?: Player.REPEAT_MODE_OFF
+
+    fun setRepeatMode(mode: Int) {
+        controller?.repeatMode = mode
+    }
+
     // --- state ------------------------------------------------------------
 
     private fun startTicker() {

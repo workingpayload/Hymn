@@ -166,6 +166,11 @@ class SettingsViewModel @Inject constructor(
 
     fun setSearchVideos(value: Boolean) = preferences.setSearchVideos(value)
 
+    val loopPlaylists: StateFlow<Boolean> = preferences.loopPlaylists
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), preferences.loopPlaylistsNow)
+
+    fun setLoopPlaylists(value: Boolean) = preferences.setLoopPlaylists(value)
+
     val cacheSongs: StateFlow<Boolean> = preferences.cacheSongs
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), preferences.cacheSongsNow)
 
