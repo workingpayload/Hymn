@@ -183,7 +183,7 @@ function renderWear(data) {
 }
 
 /**
- * The Windows and Mac buttons, for MusicSM Desktop. Before its first release they stay muted links
+ * The Windows and Mac buttons, for Hymn for desktop. Before its first release they stay muted links
  * to the desktop releases page, so they're never dead ends.
  */
 function renderDesktop(data) {
@@ -219,12 +219,12 @@ function renderDesktop(data) {
   const macInstall = el("mac-install");
   if (macInstall) macInstall.hidden = !data.desktop?.mac;
   if (!newest) {
-    el("desktop-meta").textContent = "MusicSM Desktop for Windows and Mac is coming soon.";
+    el("desktop-meta").textContent = "Hymn for Windows and Mac is coming soon.";
     return;
   }
   const released = formatDate(newest.publishedAt);
   el("desktop-meta").textContent = [
-    `MusicSM Desktop ${newest.version}`,
+    `Hymn for desktop ${newest.version}`,
     released && `released ${released}`,
     "Windows 10/11 (64-bit)",
     "Macs with Apple silicon",
@@ -411,6 +411,49 @@ function setupInstallCommands() {
   });
 }
 
+/** The floating nav firms up once the page scrolls under it. */
+function setupNav() {
+  const nav = el("nav");
+  if (!nav) return;
+  const update = () => nav.classList.toggle("is-scrolled", window.scrollY > 24);
+  update();
+  window.addEventListener("scroll", update, { passive: true });
+}
+
+/**
+ * Fades each block in as it scrolls into view. The stylesheet only hides them when this script
+ * runs, and anything the observer can't handle is shown straight away.
+ */
+function setupReveal() {
+  const blocks = document.querySelectorAll(".reveal");
+  if (!("IntersectionObserver" in window) || prefersReducedMotion) {
+    blocks.forEach((block) => block.classList.add("is-visible"));
+    return;
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const block = entry.target;
+        block.classList.add("is-visible");
+        // The stagger is for coming in only; hover effects afterwards shouldn't wait for it.
+        block.addEventListener("transitionend", () => (block.style.transitionDelay = ""), { once: true });
+        observer.unobserve(block);
+      }
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+  );
+  // Neighbours in a row come in one after another rather than all at once.
+  blocks.forEach((block) => {
+    const siblings = [...block.parentElement.children].filter((child) => child.classList.contains("reveal"));
+    const index = siblings.indexOf(block);
+    if (index > 0) block.style.transitionDelay = `${Math.min(index, 6) * 70}ms`;
+    observer.observe(block);
+  });
+}
+
+setupNav();
+setupReveal();
 loadRelease();
 loadStats();
 watchDownloads();

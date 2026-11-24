@@ -6,10 +6,11 @@ dependencies — it runs on Node's built-in `fetch`.
 ```
 web/
 ├── index.html        the page
-├── styles.css        palette, typography and glass lifted from ui/theme/Palette.kt
-├── app.js            fills the page in from the API; pure progressive enhancement
+├── styles.css        AMOLED black, the app's colour wash, glass and Plus Jakarta Sans, after the app's Home
+├── app.js            fills the page in from the API, plus the nav and scroll-in effects; pure progressive enhancement
 ├── icon.png          the launcher icon, used for the favicon and nav
-├── icon-large.jpg    the hero artwork, cropped from the 1024px source icon
+├── icon-large.jpg    the social preview image, cropped from the 1024px source icon
+├── shots/            real screenshots of the apps (phone Home and Now Playing, desktop Home)
 ├── install.sh        one-command Mac install of Hymn (curl … | bash)
 └── api/
     ├── _lib.js       shared GitHub + Redis helpers (the _ prefix keeps it off the router)
@@ -156,7 +157,7 @@ cached differently on purpose:
 | --- | --- | --- |
 | `index.html`, `/api/stats` | no cache | must always be current |
 | `styles.css`, `app.js` | `no-cache` (revalidate every load) | a few KB, and a stale copy paired with fresh HTML breaks the page |
-| `icon.png`, `icon-large.jpg` | `immutable`, one year | heavy, and rarely change |
+| `icon.png`, `icon-large.jpg`, `shots/*` | `immutable`, one year | heavy, and rarely change |
 
 **If you change an image, bump its `?v=` in `index.html`.** The images are served `immutable`, so
 browsers will not re-request them otherwise — the query string is what makes the URL new.

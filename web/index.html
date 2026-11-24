@@ -3,21 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hymn — Your music. Beautifully offline.</title>
+    <title>Hymn — Your music. Beautifully yours.</title>
     <meta
       name="description"
-      content="Hymn is a glassmorphic Android music player with offline downloads, synced lyrics, ambient mode and a Wear OS companion. Download the latest APK."
+      content="Hymn is a free, open-source music player for Android, Wear OS, Windows and Mac. Glass that takes the colour of every cover, moods and daily mixes that learn from you, lyrics in sync and downloads that work offline."
     />
-    <meta name="theme-color" content="#121318" />
+    <meta name="theme-color" content="#050507" />
 
     <link rel="icon" href="/icon.png?v=2" type="image/png" />
     <link rel="apple-touch-icon" href="/icon.png?v=2" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Hymn — Your music. Beautifully offline." />
+    <meta property="og:title" content="Hymn — Your music. Beautifully yours." />
     <meta
       property="og:description"
-      content="A glassmorphic Android music player with offline downloads, synced lyrics, ambient mode and a Wear OS companion."
+      content="A free, open-source music player for Android, Wear OS, Windows and Mac: moods, daily mixes, lyrics in sync and offline downloads."
     />
     <meta property="og:image" content="/icon-large.jpg?v=2" />
     <meta name="twitter:card" content="summary" />
@@ -29,67 +29,65 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css" />
+    <!-- Lets the stylesheet hold scroll-in animations back only when the script will run them. -->
+    <script>document.documentElement.classList.add("js");</script>
   </head>
 
   <body>
-    <!-- The same drifting aurora the app's ambient mode uses. Purely decorative. -->
-    <div class="aurora" aria-hidden="true">
-      <span class="blob blob-coral"></span>
-      <span class="blob blob-lavender"></span>
-      <span class="blob blob-teal"></span>
+    <!--
+      The app's colour wash: a glow at the top of the page that drifts between the warm tones the
+      app takes from album art, over true black. Purely decorative.
+    -->
+    <div class="wash" aria-hidden="true">
+      <span class="wash-layer wash-amber"></span>
+      <span class="wash-layer wash-coral"></span>
+      <span class="wash-layer wash-violet"></span>
     </div>
 
-    <header class="nav">
-      <div class="shell">
+    <header class="nav" id="nav">
+      <div class="nav-bar">
         <a class="brand" href="/">
-          <img src="/icon.png?v=2" alt="" width="34" height="34" />
+          <img src="/icon.png?v=2" alt="" width="30" height="30" />
           <span>Hymn</span>
         </a>
-        <nav class="nav-links">
+        <nav class="nav-links" aria-label="Main">
           <a class="nav-link is-optional" href="#features">Features</a>
-          <a class="nav-link is-optional" href="#install">Install</a>
-          <a class="nav-link nav-support" href="#support" aria-label="Buy me a Diet Coke">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M6 7h12l-1.2 13.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8L6 7z" />
-              <path d="M4.5 7h15" />
-              <path d="M14 7l2-4" />
-            </svg>
-            <span>Buy me a Diet Coke</span>
-          </a>
+          <a class="nav-link is-optional" href="#download">Download</a>
           <a
-            class="nav-link"
+            class="nav-link is-optional"
             href="https://github.com/workingpayload/Hymn"
             rel="noopener noreferrer"
             target="_blank"
             >GitHub</a
           >
+          <a class="nav-link nav-support" href="#support" aria-label="Buy me a Diet Coke">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 7h12l-1.2 13.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8L6 7z" />
+              <path d="M4.5 7h15" />
+              <path d="M14 7l2-4" />
+            </svg>
+            <span>Diet Coke</span>
+          </a>
         </nav>
       </div>
     </header>
 
     <main>
+      <!-- ------------------------------------------------------------------ hero -->
       <section class="hero">
-        <div class="shell">
+        <div class="shell hero-grid">
           <div class="hero-copy">
             <p class="pill">
               <span class="dot" aria-hidden="true"></span>
               <span id="release-pill">Loading the latest build…</span>
             </p>
 
-            <h1>Your music.<br /><span class="accent">Beautifully offline.</span></h1>
+            <h1>Your music.<br /><span class="accent">Beautifully yours.</span></h1>
 
             <p class="tagline">
-              A glassmorphic Android player built around the way you actually listen — downloads
-              that work on a plane, lyrics that keep time, and a home feed that learns from your
-              history instead of guessing.
+              A free, open-source music player for Android and desktop. Glass that takes the colour
+              of every cover, moods and daily mixes that learn from what you play, lyrics that keep
+              time, and downloads that work on a plane.
             </p>
 
             <div class="cta-row">
@@ -98,361 +96,497 @@
                 first published APK. Script only narrows it to a specific asset.
               -->
               <a class="btn btn-primary" id="download-btn" href="/api/download">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path
-                    d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1Zm-7 15a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20.5V19a1 1 0 0 1 1-1Z"
-                  />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 4v11" />
+                  <path d="m7 10 5 5 5-5" />
+                  <path d="M5 20h14" />
                 </svg>
                 <span id="download-label">Download for Android</span>
               </a>
+              <a class="btn btn-glass" href="#download">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="12" rx="2" />
+                  <path d="M8 20h8M12 16v4" />
+                </svg>
+                <span>Windows &amp; Mac</span>
+              </a>
+            </div>
 
+            <p class="cta-meta">
+              <span id="download-meta">Checking the latest release…</span>
               <a
-                class="btn btn-ghost"
+                class="meta-link"
                 id="release-link"
                 href="https://github.com/workingpayload/Hymn/releases"
                 rel="noopener noreferrer"
                 target="_blank"
+                >Release notes</a
               >
-                Release notes
-              </a>
-            </div>
-
-            <p class="cta-meta" id="download-meta">Checking the latest release…</p>
+            </p>
             <ul class="alt-builds" id="alt-builds"></ul>
+          </div>
 
-            <!--
-              The Wear OS app, attached to the same GitHub release as the phone APK. A plain link
-              too: /api/download?wear=1 resolves the newest watch build server-side (or the
-              releases page before there is one). Script only pins it to the build it describes.
-            -->
-            <div class="wear-cta">
-              <div class="cta-row">
-                <a class="btn btn-ghost" id="wear-btn" href="/api/download?wear=1">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
+          <!-- Real screenshots of the app, in phone frames. -->
+          <div class="stage" aria-hidden="true">
+            <div class="stage-glow"></div>
+            <figure class="phone phone-back">
+              <img src="/shots/phone-playing.jpg?v=1" alt="" width="540" height="1200" loading="eager" />
+            </figure>
+            <figure class="phone phone-front">
+              <img src="/shots/phone-home.jpg?v=1" alt="" width="540" height="1200" loading="eager" />
+            </figure>
+            <div class="float-chip chip-mood">
+              <span class="chip-dot" style="--c: #7fd1c7"></span>Chill
+              <span class="chip-dot" style="--c: #f07a9a"></span>Party
+              <span class="chip-dot" style="--c: #f0a35a"></span>Rock
+            </div>
+            <div class="float-chip chip-live">
+              <span class="bars"><i></i><i></i><i></i><i></i></span>
+              Colour from the cover
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mood chips drifting by, like the row at the top of the app's Home. -->
+      <div class="moods" aria-hidden="true">
+        <div class="moods-track">
+          <span class="mood"><i style="--c: #7a8cff"></i>Pop</span>
+          <span class="mood"><i style="--c: #f0a35a"></i>Hip-Hop</span>
+          <span class="mood"><i style="--c: #ff6b5e"></i>Rock</span>
+          <span class="mood"><i style="--c: #c29bff"></i>Lo-Fi</span>
+          <span class="mood"><i style="--c: #c8c8d0"></i>Workout</span>
+          <span class="mood"><i style="--c: #7fd1c7"></i>Chill</span>
+          <span class="mood"><i style="--c: #9a8cb0"></i>Focus</span>
+          <span class="mood"><i style="--c: #f07a9a"></i>Party</span>
+          <span class="mood"><i style="--c: #8fb3c8"></i>Jazz</span>
+          <span class="mood"><i style="--c: #9b8cff"></i>Classical</span>
+          <span class="mood"><i style="--c: #9cc36a"></i>Indie</span>
+          <span class="mood"><i style="--c: #a8f0e0"></i>Throwback</span>
+          <!-- The same row again, so the loop never shows a seam. -->
+          <span class="mood"><i style="--c: #7a8cff"></i>Pop</span>
+          <span class="mood"><i style="--c: #f0a35a"></i>Hip-Hop</span>
+          <span class="mood"><i style="--c: #ff6b5e"></i>Rock</span>
+          <span class="mood"><i style="--c: #c29bff"></i>Lo-Fi</span>
+          <span class="mood"><i style="--c: #c8c8d0"></i>Workout</span>
+          <span class="mood"><i style="--c: #7fd1c7"></i>Chill</span>
+          <span class="mood"><i style="--c: #9a8cb0"></i>Focus</span>
+          <span class="mood"><i style="--c: #f07a9a"></i>Party</span>
+          <span class="mood"><i style="--c: #8fb3c8"></i>Jazz</span>
+          <span class="mood"><i style="--c: #9b8cff"></i>Classical</span>
+          <span class="mood"><i style="--c: #9cc36a"></i>Indie</span>
+          <span class="mood"><i style="--c: #a8f0e0"></i>Throwback</span>
+        </div>
+      </div>
+
+      <!-- ----------------------------------------------------------------- stats -->
+      <section class="stats" aria-labelledby="stats-heading">
+        <div class="shell">
+          <h2 id="stats-heading" class="visually-hidden">Download statistics</h2>
+          <div class="stat-bar reveal">
+            <div class="card stat">
+              <span class="value" id="stat-github" data-count="0">—</span>
+              <span class="label">Downloads from GitHub</span>
+              <span class="note">Every release, all time, counted by GitHub itself</span>
+            </div>
+            <div class="card stat" id="stat-page-card" hidden>
+              <span class="value" id="stat-page" data-count="0">—</span>
+              <span class="label">Downloads from this page</span>
+              <span class="note">Clicks that started here</span>
+            </div>
+            <div class="card stat">
+              <span class="value value-accent" id="stat-version">—</span>
+              <span class="label">Latest version</span>
+              <span class="note" id="stat-released">Released —</span>
+            </div>
+            <div class="card stat">
+              <span class="value">Free</span>
+              <span class="label">Forever</span>
+              <span class="note">No ads, no account, no paid tier</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------- features -->
+      <section id="features" aria-labelledby="features-heading">
+        <div class="shell">
+          <div class="section-head reveal">
+            <p class="eyebrow">What's inside</p>
+            <h2 id="features-heading">Everything you'd want.<br />Nothing you wouldn't.</h2>
+            <p class="section-lede">
+              Every one of these ships in the current build. No waitlists, no paid tier, no account.
+            </p>
+          </div>
+
+          <div class="bento">
+            <!-- A Home that knows you: the new Home's moods, mixes and releases. -->
+            <article class="tile tile-home reveal">
+              <div class="tile-copy">
+                <span class="icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 3l1.8 4.6L18.5 9l-4.7 1.4L12 15l-1.8-4.6L5.5 9l4.7-1.4z" />
+                    <path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z" />
+                  </svg>
+                </span>
+                <h3>A Home that knows you</h3>
+                <p>
+                  Tap a mood and a queue starts, your favourites first. Up to four daily mixes grown
+                  from the songs you love, new releases from artists you follow, and shelves ranked
+                  by what you actually play.
+                </p>
+              </div>
+              <div class="mixes" aria-hidden="true">
+                <div class="mix" style="--a: #ff7a59; --b: #8a1c3c">
+                  <span class="mix-grid"><i></i><i></i><i></i><i></i></span>
+                  <b>Daily Mix 1</b><small>Your rotation, warmed up</small>
+                </div>
+                <div class="mix" style="--a: #7c6cff; --b: #1c2a6b">
+                  <span class="mix-grid"><i></i><i></i><i></i><i></i></span>
+                  <b>Daily Mix 2</b><small>Late-night favourites</small>
+                </div>
+                <div class="mix" style="--a: #2fd3b4; --b: #0d4a4a">
+                  <span class="mix-grid"><i></i><i></i><i></i><i></i></span>
+                  <b>Daily Mix 3</b><small>Deep cuts and B-sides</small>
+                </div>
+              </div>
+            </article>
+
+            <article class="tile tile-colour reveal">
+              <div class="swatches" aria-hidden="true"><i></i><i></i><i></i></div>
+              <h3>Colour from every cover</h3>
+              <p>The glass, the glow and the controls take their colour from the album art, over true AMOLED black.</p>
+            </article>
+
+            <article class="tile tile-lyrics reveal">
+              <div class="lyric-lines" aria-hidden="true">
+                <span>Lines that light up</span>
+                <span class="is-live">right on the beat,</span>
+                <span>word by word,</span>
+                <span>as the song plays</span>
+              </div>
+              <h3>Lyrics that keep time</h3>
+              <p>Synced lyrics from several sources, line by line and word by word.</p>
+            </article>
+
+            <article class="tile reveal">
+              <span class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 4v10" />
+                  <path d="m8 10 4 4 4-4" />
+                  <path d="M4 17v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1" />
+                </svg>
+              </span>
+              <h3>Real offline downloads</h3>
+              <p>Songs, albums and whole playlists on the device. No connection, no expiry.</p>
+            </article>
+
+            <article class="tile reveal">
+              <span class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 7h3l10 10h3" />
+                  <path d="M4 17h3l10-10h3" />
+                  <path d="m18 4 2 3-2 3M18 14l2 3-2 3" />
+                </svg>
+              </span>
+              <h3>Mix, EQ and sleep timer</h3>
+              <p>DJ-style transitions between tracks, crossfade, a built-in equaliser, and a timer that waits for the song to end.</p>
+            </article>
+
+            <article class="tile tile-ambient reveal">
+              <span class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" />
+                </svg>
+              </span>
+              <h3>Ambient mode</h3>
+              <p>Dock it and the screen becomes an aurora lit by the album art, with a big clock and an OLED-safe drift.</p>
+            </article>
+
+            <article class="tile reveal">
+              <span class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="4" y="4" width="6" height="6" rx="1" />
+                  <rect x="14" y="4" width="6" height="6" rx="1" />
+                  <rect x="4" y="14" width="6" height="6" rx="1" />
+                  <path d="M14 14h2v2M20 14v.01M14 20h.01M17 17h3v3h-3z" />
+                </svg>
+              </span>
+              <h3>Share playlists by QR</h3>
+              <p>A playlist becomes a code another phone can scan. The whole list travels in the code; no server, no link rot.</p>
+            </article>
+
+            <article class="tile tile-wide reveal">
+              <span class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="5.5" />
+                  <path d="M12 9.5V12l1.5 1.5" />
+                  <path d="M9 7l.6-4h4.8l.6 4M9 17l.6 4h4.8l.6-4" />
+                </svg>
+              </span>
+              <h3>Watch and car</h3>
+              <p>A Wear OS app with its own screens, voice search and lyrics, plus Android Auto, a widget and a Quick Settings tile.</p>
+            </article>
+
+            <article class="tile tile-wide reveal">
+              <span class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="13.5" cy="6.5" r="1" />
+                  <circle cx="17.5" cy="10.5" r="1" />
+                  <circle cx="8.5" cy="7.5" r="1" />
+                  <circle cx="6.5" cy="12.5" r="1" />
+                  <path d="M12 2a10 10 0 1 0 0 20c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H16a6 6 0 0 0 6-6c0-4.4-4.5-8.6-10-8.6z" />
+                </svg>
+              </span>
+              <h3>Make it yours</h3>
+              <p>Light, dark or true black, Material You colour from your wallpaper, or an accent of your own.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------- download -->
+      <section id="download" aria-labelledby="download-heading">
+        <div class="shell">
+          <div class="section-head reveal">
+            <p class="eyebrow">Get Hymn everywhere</p>
+            <h2 id="download-heading">On your phone, your watch<br />and your desk.</h2>
+            <p class="section-lede">
+              The same library, the same moods and the same glass, on Android, Wear OS, Windows and
+              Mac. Free downloads, straight from the project's GitHub releases.
+            </p>
+          </div>
+
+          <!-- The desktop app, in a window frame. -->
+          <figure class="window reveal" aria-hidden="true">
+            <div class="window-bar"><i></i><i></i><i></i><span>Hymn</span></div>
+            <img src="/shots/desktop-home.jpg?v=1" alt="" width="1600" height="832" loading="lazy" />
+          </figure>
+
+          <div class="platforms">
+            <article class="card platform reveal">
+              <div class="platform-head">
+                <span class="platform-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="6" y="2.5" width="12" height="19" rx="3" />
+                    <path d="M11 18.5h2" />
+                  </svg>
+                </span>
+                <div>
+                  <h3>Android</h3>
+                  <p>Phone · Android 7.0+</p>
+                </div>
+              </div>
+              <a class="btn btn-primary btn-block" href="/api/download">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 4v11" />
+                  <path d="m7 10 5 5 5-5" />
+                  <path d="M5 20h14" />
+                </svg>
+                <span>Download the APK</span>
+              </a>
+              <!--
+                The Wear OS app, attached to the same GitHub release as the phone APK. A plain link
+                too: /api/download?wear=1 resolves the newest watch build server-side (or the
+                releases page before there is one). Script only pins it to the build it describes.
+              -->
+              <div class="wear-cta">
+                <a class="btn btn-glass btn-block" id="wear-btn" href="/api/download?wear=1">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="6" />
                     <path d="M12 9.5V12l1.5 1.5" />
                     <path d="M9 6.5 9.6 3h4.8l.6 3.5M9 17.5l.6 3.5h4.8l.6-3.5" />
                   </svg>
-                  <span>Download for Wear OS</span>
+                  <span>Wear OS app</span>
                 </a>
+                <p class="platform-meta" id="wear-meta">
+                  Hymn for Wear OS · controls, lyrics and voice search on your watch
+                </p>
               </div>
-              <p class="cta-meta" id="wear-meta">
-                Hymn for Wear OS · controls, lyrics and voice search on your watch
-              </p>
-            </div>
+            </article>
 
             <!--
-              MusicSM Desktop, released from its own repo. Plain links as well: /api/download sends
+              Hymn for desktop, released from its own repo. Plain links as well: /api/download sends
               each to the newest installer for that OS, or to the desktop releases page before the
               first one is out. Script only pins them to the build it describes.
             -->
             <div class="desktop-cta">
-              <div class="cta-row">
-                <a class="btn btn-ghost" id="desktop-windows" href="/api/download?desktop=windows">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <rect x="3" y="4" width="18" height="12" rx="2" />
-                    <path d="M8 20h8M12 16v4" />
-                  </svg>
-                  <span>Download for Windows</span>
-                </a>
-                <a class="btn btn-ghost" id="desktop-mac" href="/api/download?desktop=mac">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <rect x="4" y="5" width="16" height="11" rx="1.5" />
-                    <path d="M2 19h20" />
-                  </svg>
-                  <span>Download for Mac</span>
-                </a>
+              <article class="card platform reveal">
+                <div class="platform-head">
+                  <span class="platform-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M3 5.5 10.5 4.5v7H3zM12.5 4.2 21 3v8.5h-8.5zM3 12.5h7.5v7L3 18.5zM12.5 12.5H21V21l-8.5-1.2z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <h3>Windows</h3>
+                    <p>Windows 10/11 · 64-bit</p>
+                  </div>
+                </div>
                 <a
-                  class="btn btn-ghost"
+                  class="btn btn-primary btn-block"
                   id="desktop-store"
                   href="https://apps.microsoft.com/detail/9NNT6LVGQH28?hl=en-us&amp;gl=IN&amp;ocid=pdpshare"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M3 3h8.5v8.5H3zM12.5 3H21v8.5h-8.5zM3 12.5h8.5V21H3zM12.5 12.5H21V21h-8.5z" />
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 8h16l-1 12H5z" />
+                    <path d="M9 8V6a3 3 0 0 1 6 0v2" />
                   </svg>
-                  <span>Get it from Microsoft Store</span>
+                  <span>Microsoft Store</span>
                 </a>
-              </div>
-              <p class="cta-meta" id="desktop-meta">
-                MusicSM Desktop · Windows 10/11 (64-bit) · Macs with Apple silicon
-              </p>
-
-              <!--
-                Windows: the Microsoft Store build, installed with winget from the msstore source.
-                Store builds are signed by Microsoft, so there's no SmartScreen prompt.
-              -->
-              <div class="install-cmd" id="windows-install">
-                <p class="install-cmd-label">On Windows? Install from the Microsoft Store with one command</p>
-                <div class="install-cmd-row">
-                  <code id="windows-install-cmd">winget install --id 9NNT6LVGQH28 --source msstore</code>
-                  <button class="copy-btn" data-copy="windows-install-cmd" type="button">Copy</button>
+                <a class="btn btn-glass btn-block" id="desktop-windows" href="/api/download?desktop=windows">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 4v11" />
+                    <path d="m7 10 5 5 5-5" />
+                    <path d="M5 20h14" />
+                  </svg>
+                  <span>Installer (.msi)</span>
+                </a>
+                <!--
+                  Windows: the Microsoft Store build, installed with winget from the msstore source.
+                  Store builds are signed by Microsoft, so there's no SmartScreen prompt.
+                -->
+                <div class="install-cmd" id="windows-install">
+                  <p class="install-cmd-label">Or in Terminal</p>
+                  <div class="install-cmd-row">
+                    <code id="windows-install-cmd">winget install --id 9NNT6LVGQH28 --source msstore</code>
+                    <button class="copy-btn" data-copy="windows-install-cmd" type="button">Copy</button>
+                  </div>
                 </div>
-                <p class="install-cmd-hint">
-                  Paste it into PowerShell or Terminal and accept the Store terms when asked. Updates
-                  come through the Store.
-                  <a
-                    href="https://apps.microsoft.com/detail/9NNT6LVGQH28?hl=en-us&amp;gl=IN&amp;ocid=pdpshare"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >View in the Store</a
-                  >
-                </p>
-              </div>
+              </article>
 
-              <!--
-                The Mac app isn't signed by Apple yet, so a DMG from the browser gets macOS's "can't
-                be opened" prompt. This command (install.sh) fetches it with curl instead, which
-                macOS doesn't flag, and installs it into Applications.
-              -->
-              <div class="install-cmd" id="mac-install">
-                <p class="install-cmd-label">On a Mac? Install with one command, no security prompt</p>
-                <div class="install-cmd-row">
-                  <code id="mac-install-cmd">curl -fsSL https://music-sm.vercel.app/install.sh | bash</code>
-                  <button class="copy-btn" data-copy="mac-install-cmd" type="button">Copy</button>
+              <article class="card platform reveal">
+                <div class="platform-head">
+                  <span class="platform-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="3.5" y="4.5" width="17" height="11.5" rx="1.5" />
+                      <path d="M2 19.5h20" />
+                    </svg>
+                  </span>
+                  <div>
+                    <h3>Mac</h3>
+                    <p>Macs with Apple silicon</p>
+                  </div>
                 </div>
-                <p class="install-cmd-hint">
-                  Paste it into Terminal. It puts MusicSM Desktop in Applications and opens it.
-                  <a href="/install.sh" target="_blank" rel="noopener">See what it does</a>
-                </p>
-              </div>
-            </div>
-          </div>
+                <a class="btn btn-glass btn-block" id="desktop-mac" href="/api/download?desktop=mac">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 4v11" />
+                    <path d="m7 10 5 5 5-5" />
+                    <path d="M5 20h14" />
+                  </svg>
+                  <span>Disk image (.dmg)</span>
+                </a>
+                <!--
+                  The Mac app isn't signed by Apple yet, so a DMG from the browser gets macOS's
+                  "can't be opened" prompt. This command (install.sh) fetches it with curl instead,
+                  which macOS doesn't flag, and installs it into Applications.
+                -->
+                <div class="install-cmd" id="mac-install">
+                  <p class="install-cmd-label">Install with one command, no security prompt</p>
+                  <div class="install-cmd-row">
+                    <code id="mac-install-cmd">curl -fsSL https://music-sm.vercel.app/install.sh | bash</code>
+                    <button class="copy-btn" data-copy="mac-install-cmd" type="button">Copy</button>
+                  </div>
+                  <p class="install-cmd-hint">
+                    Paste it into Terminal; it puts Hymn in Applications and opens it.
+                    <a href="/install.sh" target="_blank" rel="noopener">See what it does</a>
+                  </p>
+                </div>
+              </article>
 
-          <div class="hero-art" aria-hidden="true">
-            <img src="/icon-large.jpg?v=2" alt="" width="960" height="960" />
-            <div class="meter">
-              <i></i><i></i><i></i><i></i><i></i>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="stats" aria-labelledby="stats-heading">
-        <div class="shell">
-          <h2 id="stats-heading" class="visually-hidden">Download statistics</h2>
-          <div class="stat-grid">
-            <div class="card stat stat-coral">
-              <span class="value" id="stat-github" data-count="0">—</span>
-              <span class="label">Downloads from GitHub</span>
-              <span class="note">Every release, all time, counted by GitHub itself</span>
-            </div>
-            <div class="card stat stat-teal" id="stat-page-card" hidden>
-              <span class="value" id="stat-page" data-count="0">—</span>
-              <span class="label">Downloads from this page</span>
-              <span class="note">Clicks that started here</span>
-            </div>
-            <div class="card stat stat-lavender">
-              <span class="value" id="stat-version">—</span>
-              <span class="label">Latest version</span>
-              <span class="note" id="stat-released">Released —</span>
+              <p class="desktop-meta" id="desktop-meta">
+                Hymn for desktop · Windows 10/11 (64-bit) · Macs with Apple silicon
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="features" aria-labelledby="features-heading">
-        <div class="shell">
-          <p class="eyebrow">What's inside</p>
-          <h2 id="features-heading">Built for people who listen properly</h2>
-          <p class="section-lede">
-            Every one of these ships in the current build — no waitlists, no paid tier, no account.
-          </p>
-
-          <div class="feature-grid">
-            <article class="card feature">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M5 20h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-5.6l-1.7-2.1A2 2 0 0 0 10.2 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Zm7-3.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" />
-                </svg>
-              </span>
-              <h3>Real offline downloads</h3>
-              <p>
-                Keep tracks, albums and whole playlists on the device. No connection, no
-                degradation, no silent expiry.
-              </p>
-            </article>
-
-            <article class="card feature">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-1.2 5.6 6 3.5a1 1 0 0 1 0 1.8l-6 3.5a1 1 0 0 1-1.5-.9V8.5a1 1 0 0 1 1.5-.9Z" />
-                </svg>
-              </span>
-              <h3>A feed that learns</h3>
-              <p>
-                Home is ranked from what you actually played — recent plays, likes and followed
-                artists — not a shuffled list of whatever is trending.
-              </p>
-            </article>
-
-            <article class="card feature">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M4 4h6v6H4V4Zm2 2v2h2V6H6Zm8-2h6v6h-6V4Zm2 2v2h2V6h-2ZM4 14h6v6H4v-6Zm2 2v2h2v-2H6Zm8-2h2v2h-2v-2Zm4 0h2v2h-2v-2Zm-4 4h2v2h-2v-2Zm4 0h2v2h-2v-2Z" />
-                </svg>
-              </span>
-              <h3>Share playlists by QR</h3>
-              <p>
-                A playlist becomes a code another phone can scan from across the table. The whole
-                thing travels in the code — no server, no account, no link rot.
-              </p>
-            </article>
-
-            <article class="card feature">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z" />
-                </svg>
-              </span>
-              <h3>Ambient mode</h3>
-              <p>
-                Dock it and the screen becomes an aurora lit by the album art, with a big clock and
-                slow drift that protects OLED panels overnight.
-              </p>
-            </article>
-
-            <article class="card feature">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M4 5h16v2H4V5Zm0 4h10v2H4V9Zm0 4h16v2H4v-2Zm0 4h10v2H4v-2Z" />
-                </svg>
-              </span>
-              <h3>Lyrics that keep time</h3>
-              <p>
-                Synced, line-by-line lyrics that scroll with the track, and a plain view for
-                everything else.
-              </p>
-            </article>
-
-            <article class="card feature">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M6 3h2v18H6V3Zm5 5h2v13h-2V8Zm5-5h2v18h-2V3ZM4 9h6v2H4V9Zm5 6h6v2H9v-2Zm5-9h6v2h-6V6Z" />
-                </svg>
-              </span>
-              <h3>Sleep timer and EQ</h3>
-              <p>
-                Fade out at the end of the track rather than mid-chorus, and shape the sound with a
-                built-in equaliser and crossfade.
-              </p>
-            </article>
-
-            <article class="card feature">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M8 2h8l-.6 4.2A7 7 0 0 1 19 12a7 7 0 0 1-3.6 6.1L16 22H8l.6-3.9A7 7 0 0 1 5 12a7 7 0 0 1 3.6-5.8L8 2Zm4 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z" />
-                </svg>
-              </span>
-              <h3>Wear OS companion</h3>
-              <p>
-                Skip, pause and browse from the watch, with its own screens rather than a stretched
-                phone layout.
-              </p>
-            </article>
-
-            <article class="card feature">
-              <span class="icon">
-                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 2a10 10 0 0 0 0 20 2.5 2.5 0 0 0 2.5-2.5c0-.65-.25-1.24-.66-1.68a2.48 2.48 0 0 1 1.83-4.16h1.83A4.5 4.5 0 0 0 22 9.16C22 5.2 17.52 2 12 2ZM6.5 12a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3.5 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" />
-                </svg>
-              </span>
-              <h3>Make it yours</h3>
-              <p>
-                Light, dark and a true-black AMOLED theme, Material You colour from your wallpaper,
-                or pick an accent yourself.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
+      <!-- --------------------------------------------------------------- install -->
       <section id="install" aria-labelledby="install-heading">
         <div class="shell">
-          <p class="eyebrow">Getting it on your phone</p>
-          <h2 id="install-heading">Three steps, about a minute</h2>
-          <p class="section-lede">
-            Hymn isn't on the Play Store, so Android will ask permission before installing it.
-            That prompt is normal for any app installed outside the store.
-          </p>
-
-          <div class="steps">
-            <article class="card step">
-              <h3>Download the APK</h3>
-              <p>
-                Tap the download button above. Your browser may warn that this file type can harm
-                your device — that warning appears for every APK.
-              </p>
-            </article>
-
-            <article class="card step">
-              <h3>Allow your browser to install</h3>
-              <p>
-                Open the downloaded file. Android will offer to take you to
-                <em>Install unknown apps</em>; enable it for the browser you used, then come back.
-              </p>
-            </article>
-
-            <article class="card step">
-              <h3>Install and open</h3>
-              <p>
-                Tap <em>Install</em>, then <em>Open</em>. Nothing to sign up for — the app works the
-                moment it starts.
-              </p>
-            </article>
+          <div class="section-head reveal">
+            <p class="eyebrow">On Android</p>
+            <h2 id="install-heading">Installed in about a minute</h2>
+            <p class="section-lede">
+              Hymn isn't on the Play Store, so Android asks before installing it. That prompt is
+              normal for any app from outside the store.
+            </p>
           </div>
 
-          <p class="notice">
-            <strong>Requires Android 7.0 or newer.</strong> Downloads are served straight from the
-            project's GitHub releases, so you can always verify the file at source.
-          </p>
+          <ol class="steps">
+            <li class="card step reveal">
+              <h3>Download the APK</h3>
+              <p>Tap download above. Your browser may warn about the file type; it says that for every APK.</p>
+            </li>
+            <li class="card step reveal">
+              <h3>Allow the install</h3>
+              <p>Open the file. Android offers <em>Install unknown apps</em>; turn it on for your browser, then come back.</p>
+            </li>
+            <li class="card step reveal">
+              <h3>Open and play</h3>
+              <p>Tap <em>Install</em>, then <em>Open</em>. Nothing to sign up for; it works the moment it starts.</p>
+            </li>
+          </ol>
 
-          <p class="notice">
-            <strong>Have a Wear OS watch?</strong> The watch app needs Hymn on your phone and
-            only talks to the phone build from the same release, so update both together. Watches
-            have no browser to install from: install it from a computer with
-            <code>adb install</code> over Wi‑Fi debugging (Settings → Developer options on the
-            watch), or with an app like Bugjaeger or Wear Installer on your phone.
-          </p>
-
-          <p class="notice">
-            <strong>On a computer?</strong> On Windows, the easiest way is the
-            <a href="https://apps.microsoft.com/detail/9NNT6LVGQH28?hl=en-us&amp;gl=IN&amp;ocid=pdpshare" target="_blank" rel="noopener noreferrer">Microsoft Store</a>
-            (or the <code>winget</code> command above): it's signed and updates itself. The direct
-            Windows and Mac installers aren't code-signed yet.
-            On Windows, if SmartScreen steps in, choose <em>More info → Run anyway</em>. On a Mac,
-            the one-line Terminal command above installs it with no prompt; if you downloaded the
-            DMG instead, open the app once, then allow it under
-            <em>System Settings → Privacy &amp; Security → Open Anyway</em>.
-          </p>
+          <div class="faq reveal">
+            <details>
+              <summary>Is it safe to install from here?</summary>
+              <p>
+                Downloads come straight from the project's GitHub releases, so you can always check
+                the file at the source. Hymn needs Android 7.0 or newer.
+              </p>
+            </details>
+            <details>
+              <summary>How do I put it on my Wear OS watch?</summary>
+              <p>
+                The watch app needs Hymn on your phone and talks only to the phone build from the
+                same release, so update both together. Watches have no browser: install it from a
+                computer with <code>adb install</code> over Wi‑Fi debugging (Settings → Developer
+                options on the watch), or with an app like Bugjaeger or Wear Installer on your phone.
+              </p>
+            </details>
+            <details>
+              <summary>Windows or Mac warns about the installer</summary>
+              <p>
+                On Windows the easiest way is the
+                <a href="https://apps.microsoft.com/detail/9NNT6LVGQH28?hl=en-us&amp;gl=IN&amp;ocid=pdpshare" target="_blank" rel="noopener noreferrer">Microsoft Store</a>
+                (or the <code>winget</code> command): it's signed and updates itself. The direct
+                installers aren't code-signed yet. If SmartScreen steps in, choose
+                <em>More info → Run anyway</em>. On a Mac, the one-line Terminal command installs it
+                with no prompt; if you downloaded the DMG, open the app once, then allow it under
+                <em>System Settings → Privacy &amp; Security → Open Anyway</em>.
+              </p>
+            </details>
+          </div>
         </div>
       </section>
 
+      <!-- --------------------------------------------------------------- support -->
+      <section class="support-section" aria-labelledby="support-heading">
+        <div class="shell">
+          <div class="support-band reveal">
+            <div>
+              <p class="eyebrow">Made by one person</p>
+              <h2 id="support-heading">Enjoying Hymn?</h2>
+              <p class="section-lede">
+                It's free, with no ads and no account. If it earned a spot on your phone, a Diet
+                Coke keeps the updates coming.
+              </p>
+            </div>
+            <a class="btn btn-primary btn-coral" href="#support">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M6 7h12l-1.2 13.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8L6 7z" />
+                <path d="M4.5 7h15" />
+                <path d="M14 7l2-4" />
+              </svg>
+              <span>Buy me a Diet Coke</span>
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Support: clicking "Support me" opens this chooser and jumps into the picked UPI app. -->
@@ -479,14 +613,17 @@
     </dialog>
 
     <footer>
-      <div class="shell">
-        <span>Hymn · <span id="footer-version">—</span></span>
-        <span>
+      <div class="shell footer-row">
+        <a class="brand" href="/">
+          <img src="/icon.png?v=2" alt="" width="26" height="26" />
+          <span>Hymn</span>
+          <span class="footer-version" id="footer-version">—</span>
+        </a>
+        <span class="footer-links">
+          <a href="#features">Features</a>
+          <a href="#download">Download</a>
           <a href="#support">Support</a>
-          ·
-          <a href="https://github.com/workingpayload/Hymn" rel="noopener noreferrer" target="_blank"
-            >Source on GitHub</a
-          >
+          <a href="https://github.com/workingpayload/Hymn" rel="noopener noreferrer" target="_blank">Source on GitHub</a>
         </span>
       </div>
     </footer>
