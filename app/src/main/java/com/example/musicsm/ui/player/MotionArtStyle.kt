@@ -12,6 +12,6 @@ enum class MotionArtStyle {
     FULL_SCREEN;
 
     companion object {
-        fun fromKey(key: String?): MotionArtStyle = entries.firstOrNull { it.name == key } ?: FULL_SCREEN
+        fun fromKey(key: String?): MotionArtStyle = entries.firstOrNull { it.name == key } ?: EDGE
     }
 }

@@ -32,7 +32,7 @@ enum class ThemeMode {
 data class ThemeSettings(
     val mode: ThemeMode = ThemeMode.DARK,
     /** Collapse dark surfaces to pure black for OLED panels. */
-    val amoled: Boolean = false,
+    val amoled: Boolean = true,
     /** Seed the accent from the system wallpaper (Android 12+). */
     val materialYou: Boolean = false,
     /** Explicit accent override from the picker or current artwork; `null` keeps the default. */
@@ -94,9 +94,9 @@ private fun MusicSmPalette.toColorScheme() = if (isLight) {
 /**
  * App theme, built on the Stitch "Glassmorphic Music Streamer" design.
  *
- * The dark palette is the default and is byte-identical to the original hardcoded scheme, so
- * leaving every appearance setting untouched keeps the app looking exactly as it did. Light,
- * AMOLED, Material You and the accent picker layer on top of that via [LocalMusicSmPalette].
+ * The dark palette is byte-identical to the original hardcoded scheme. By default it is shown as
+ * AMOLED black with the accent taken from the playing track's artwork; Light, Material You and the
+ * accent picker layer on top of that via [LocalMusicSmPalette].
  */
 @Composable
 fun MusicSMTheme(

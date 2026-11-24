@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generated_at": "2026-11-07T18:54:00Z",
-  "checkpoint": "session-start refresh",
+  "generated_at": "2026-11-24T19:45:00Z",
+  "checkpoint": "release 5.0.0",
   "file_count": 220,
   "module_count": 5,
-  "git_sha": "37ce5a3",
+  "git_sha": "5614909",
   "git": true,
   "hot_files_window_days": 30
 }

@@ -1,5 +1,6 @@
 package com.example.musicsm.data.repository
 
+import com.example.musicsm.data.cache.CatalogPreviewCache
 import com.example.musicsm.domain.model.AccountLibrary
 import com.example.musicsm.domain.model.Album
 import com.example.musicsm.domain.model.AlbumAudio
@@ -25,6 +26,7 @@ import javax.inject.Singleton
 @Singleton
 class MusicRepositoryImpl @Inject constructor(
     private val source: MusicSource,
+    private val previews: CatalogPreviewCache,
 ) : MusicRepository {
 
     private val streamCache = ConcurrentHashMap<String, PlayableStream>()
@@ -38,26 +40,32 @@ class MusicRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun homeFeed(): HomeFeed = withContext(Dispatchers.IO) { source.homeFeed() }
+    // Everything that returns albums, artists or playlists is noted in [previews], so their pages
+    // can open on the cover and title already seen rather than on a spinner.
+
+    override suspend fun homeFeed(): HomeFeed =
+        withContext(Dispatchers.IO) { source.homeFeed() }.also { previews.record(it) }
 
     override suspend fun moreHomeShelves(continuation: String): HomeFeed =
-        withContext(Dispatchers.IO) { source.moreHomeShelves(continuation) }
+        withContext(Dispatchers.IO) { source.moreHomeShelves(continuation) }.also { previews.record(it) }
 
     override suspend fun search(query: String, includeVideos: Boolean): SearchResults =
-        withContext(Dispatchers.IO) { source.search(query, includeVideos) }
+        withContext(Dispatchers.IO) { source.search(query, includeVideos) }.also { previews.record(it) }
 
     override suspend fun searchSongs(query: String): List<Song> =
         withContext(Dispatchers.IO) { source.searchSongs(query) }
 
-    override suspend fun album(id: String): Album = withContext(Dispatchers.IO) { source.album(id) }
+    override suspend fun album(id: String): Album =
+        withContext(Dispatchers.IO) { source.album(id) }.also { previews.record(it) }
 
-    override suspend fun artist(id: String): Artist = withContext(Dispatchers.IO) { source.artist(id) }
+    override suspend fun artist(id: String): Artist =
+        withContext(Dispatchers.IO) { source.artist(id) }.also { previews.record(it) }
 
     override suspend fun playlist(id: String): Playlist =
-        withContext(Dispatchers.IO) { source.playlist(id) }
+        withContext(Dispatchers.IO) { source.playlist(id) }.also { previews.record(it) }
 
     override suspend fun fullPlaylist(id: String, maxTracks: Int): Playlist =
-        withContext(Dispatchers.IO) { source.fullPlaylist(id, maxTracks) }
+        withContext(Dispatchers.IO) { source.fullPlaylist(id, maxTracks) }.also { previews.record(it) }
 
     override suspend fun relatedTo(songId: String): List<Song> =
         withContext(Dispatchers.IO) { source.relatedTo(songId) }
@@ -141,7 +149,7 @@ class MusicRepositoryImpl @Inject constructor(
     override fun browseTiles(): List<BrowseTile> = BROWSE_TILES
 
     override suspend fun accountLibrary(): AccountLibrary =
-        withContext(Dispatchers.IO) { source.accountLibrary() }
+        withContext(Dispatchers.IO) { source.accountLibrary() }.also { previews.record(it) }
 
     override suspend fun accountHistory(): List<Song> =
         withContext(Dispatchers.IO) { source.accountHistory() }

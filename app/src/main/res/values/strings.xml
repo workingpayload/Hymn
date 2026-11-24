@@ -28,7 +28,6 @@
     <string name="nav_settings">Settings</string>
 
     <!-- Home -->
-    <string name="home_title">Made For You</string>
     <string name="home_title_offline">Offline</string>
     <string name="home_offline_empty">Nothing saved yet. Download songs to listen offline.</string>
     <string name="home_save_as_playlist">Save as playlist</string>
@@ -36,6 +35,20 @@
     <string name="home_offline_banner">You\'re offline — showing your downloads and library.</string>
     <string name="home_because_you_liked">Because you liked %1$s</string>
     <string name="home_more_like">More like %1$s</string>
+    <string name="home_greeting_morning">Good morning</string>
+    <string name="home_greeting_afternoon">Good afternoon</string>
+    <string name="home_greeting_evening">Good evening</string>
+    <string name="home_save_shelf">Save</string>
+    <string name="home_saved_shelf">Saved</string>
+    <string name="home_featured">Featured</string>
+    <string name="home_open">Open</string>
+    <string name="home_mixes_title">Your daily mixes</string>
+    <string name="home_mix_title">Daily Mix %1$d</string>
+    <string name="home_mix_artists_one">%1$s and more</string>
+    <string name="home_mix_artists_two">%1$s, %2$s and more</string>
+    <string name="home_mood_failed">Couldn\'t start %1$s right now</string>
+    <string name="home_tile_shuffle_subtitle">From your likes</string>
+    <string name="home_tile_shuffle_empty">No likes yet</string>
     <string name="shelf_downloaded">Downloaded</string>
     <string name="shelf_recently_played">Recently played</string>
     <string name="shelf_listen_again">Listen again</string>
@@ -47,6 +60,7 @@
     <string name="shelf_daily_discover">Daily discover</string>
     <string name="shelf_your_artists">Your artists</string>
     <string name="shelf_albums_from_artists">Albums you might have missed</string>
+    <string name="shelf_new_from_followed">New from artists you follow</string>
     <string name="shelf_more_from_artist">More from %1$s</string>
 
     <!-- Search -->

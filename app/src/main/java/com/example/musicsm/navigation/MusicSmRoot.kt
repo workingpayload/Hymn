@@ -62,7 +62,10 @@ import androidx.compose.ui.unit.dp
 import com.example.musicsm.R
 import com.example.musicsm.ui.util.isOnline
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -92,6 +95,8 @@ import com.example.musicsm.ui.account.GoogleSignInDialog
 import com.example.musicsm.ui.account.YouTubeAccountViewModel
 import com.example.musicsm.ui.account.YouTubeSignInPromptDialog
 import com.example.musicsm.ui.share.rememberQrScanner
+import com.example.musicsm.ui.support.SupportDialog
+import com.example.musicsm.ui.support.SupportPromptViewModel
 import com.example.musicsm.ui.theme.AppBackground
 import com.example.musicsm.ui.theme.GlassFillStrong
 import com.example.musicsm.ui.theme.OnDarkVariant
@@ -115,15 +120,25 @@ fun MusicSmRoot(
     val updateViewModel: UpdateViewModel = hiltViewModel()
     val accountViewModel: YouTubeAccountViewModel = hiltViewModel()
     val hymnIntroViewModel: HymnIntroViewModel = hiltViewModel()
+    val supportPromptViewModel: SupportPromptViewModel = hiltViewModel()
     val playerState by playerViewModel.state.collectAsStateWithLifecycle()
     val updateState by updateViewModel.state.collectAsStateWithLifecycle()
     val signInPrompt by accountViewModel.prompt.collectAsStateWithLifecycle()
     val showSignIn by accountViewModel.showSignIn.collectAsStateWithLifecycle()
     val showHymnIntro by hymnIntroViewModel.visible.collectAsStateWithLifecycle()
+    val showSupportPrompt by supportPromptViewModel.visible.collectAsStateWithLifecycle()
 
     // Quietly look for a newer GitHub release once per launch; the popup only shows a version the
     // user hasn't already tapped "Later" on.
     LaunchedEffect(Unit) { updateViewModel.checkOnLaunch() }
+
+    // "Buy me a Diet Coke" every couple of days, at a random moment after the app is opened.
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            supportPromptViewModel.onForeground()
+        }
+    }
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
@@ -589,6 +604,13 @@ fun MusicSmRoot(
                             onDismiss = accountViewModel::dismissPrompt,
                         )
                     }
+                }
+
+                // The support popup waits behind every other popup and the ambient screensaver.
+                val otherPopupShowing = showHymnIntro || showSignIn || signInPrompt != null ||
+                    updateState is UpdateState.Available
+                if (showSupportPrompt && !otherPopupShowing && !ambientMode) {
+                    SupportDialog(onDismiss = supportPromptViewModel::dismiss)
                 }
             }
         }

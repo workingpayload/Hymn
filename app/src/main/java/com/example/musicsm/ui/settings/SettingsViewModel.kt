@@ -38,7 +38,7 @@ data class SettingsUiState(
     val wifiOnlyDownloads: Boolean = false,
     val playbackSpeed: Float = 1f,
     val crossfadeMs: Int = 0,
-    val mixMode: Boolean = false,
+    val mixMode: Boolean = true,
     val appearance: AppearanceUiState = AppearanceUiState(),
     val motionArt: MotionArtUiState = MotionArtUiState(),
 )
@@ -47,16 +47,16 @@ data class SettingsUiState(
 data class MotionArtUiState(
     val enabled: Boolean = true,
     val wifiOnly: Boolean = true,
-    val style: MotionArtStyle = MotionArtStyle.FULL_SCREEN,
+    val style: MotionArtStyle = MotionArtStyle.EDGE,
     val source: MotionArtProvider = MotionArtProvider.AUTO,
 )
 
 /** The Appearance section's state, kept separate so the 5-flow `combine` limit stays workable. */
 data class AppearanceUiState(
     val themeMode: ThemeMode = ThemeMode.DARK,
-    val amoled: Boolean = false,
+    val amoled: Boolean = true,
     val materialYou: Boolean = false,
-    val themeFromArtwork: Boolean = false,
+    val themeFromArtwork: Boolean = true,
     /** Packed ARGB, or [AppPreferences.NO_ACCENT] for the palette default. */
     val accentColor: Int = AppPreferences.NO_ACCENT,
 ) {

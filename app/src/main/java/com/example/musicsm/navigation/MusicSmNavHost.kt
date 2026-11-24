@@ -63,12 +63,16 @@ fun MusicSmNavHost(
             WithoutBounce {
                 HomeScreen(
                     onPlaySongs = { songs, index -> playerViewModel.play(songs, index) },
+                    onShuffleSongs = { songs -> playerViewModel.shufflePlay(songs) },
                     onOpenAlbum = { navController.navigate(Routes.album(it)) },
                     onOpenArtist = { navController.navigate(Routes.artist(it)) },
                     // A remote playlist is a cover plus a track list, which is exactly what the album
                     // detail screen renders; the source resolves either kind of id.
                     onOpenPlaylist = { navController.navigate(Routes.album(it)) },
                     onOpenCached = { navController.navigate(Routes.CACHED) },
+                    onOpenStats = { navController.navigate(Routes.STATS) },
+                    onOpenLiked = { navController.navigate(Routes.liked()) },
+                    onOpenDownloads = { navController.navigate(Routes.DOWNLOADS) },
                 )
             }
         }

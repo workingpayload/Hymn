@@ -107,10 +107,10 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
      * Seamless "mix" transitions: beats of both tracks are detected and, when their tempos agree,
      * the blend is phrase-aligned; a bass swap hands over like a DJ set (a shorter timed blend
      * otherwise). Silent run-outs and lead-ins are skipped. Overrides the plain crossfade length
-     * while on.
+     * while on. On by default.
      */
     val mixMode: Flow<Boolean> get() = watch(KEY_MIX_MODE) { mixModeNow }
-    val mixModeNow: Boolean get() = prefs.getBoolean(KEY_MIX_MODE, false)
+    val mixModeNow: Boolean get() = prefs.getBoolean(KEY_MIX_MODE, true)
     fun setMixMode(value: Boolean) = prefs.edit().putBoolean(KEY_MIX_MODE, value).apply()
 
     /**
@@ -161,8 +161,9 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
     val themeModeNow: String get() = prefs.getString(KEY_THEME_MODE, DEFAULT_THEME_MODE) ?: DEFAULT_THEME_MODE
     fun setThemeMode(value: String) = prefs.edit().putString(KEY_THEME_MODE, value).apply()
 
+    /** Pure-black dark surfaces for OLED panels. On by default. */
     val amoled: Flow<Boolean> get() = watch(KEY_AMOLED) { amoledNow }
-    val amoledNow: Boolean get() = prefs.getBoolean(KEY_AMOLED, false)
+    val amoledNow: Boolean get() = prefs.getBoolean(KEY_AMOLED, true)
     fun setAmoled(value: Boolean) = prefs.edit().putBoolean(KEY_AMOLED, value).apply()
 
     val materialYou: Flow<Boolean> get() = watch(KEY_MATERIAL_YOU) { materialYouNow }
@@ -174,9 +175,9 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
     val accentColorNow: Int get() = prefs.getInt(KEY_ACCENT, NO_ACCENT)
     fun setAccentColor(argb: Int) = prefs.edit().putInt(KEY_ACCENT, argb).apply()
 
-    /** Re-tint the whole app from the current track's artwork. */
+    /** Re-tint the whole app from the current track's artwork. On by default. */
     val themeFromArtwork: Flow<Boolean> get() = watch(KEY_ARTWORK_THEME) { themeFromArtworkNow }
-    val themeFromArtworkNow: Boolean get() = prefs.getBoolean(KEY_ARTWORK_THEME, false)
+    val themeFromArtworkNow: Boolean get() = prefs.getBoolean(KEY_ARTWORK_THEME, true)
     fun setThemeFromArtwork(value: Boolean) = prefs.edit().putBoolean(KEY_ARTWORK_THEME, value).apply()
 
     /**
@@ -207,13 +208,18 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
      * Where the cover loop plays — one of [com.example.musicsm.ui.player.MotionArtStyle]'s names.
      *
      * The placements are alternatives, not layers: the same loop playing in two places at once
-     * reads as a rendering fault rather than as one effect. Installs from before the style picker
-     * only stored a full-screen on/off flag, which is honoured until a style is picked.
+     * reads as a rendering fault rather than as one effect. Defaults to Top ([STYLE_EDGE]). Installs
+     * from before the style picker that explicitly stored the old full-screen on/off flag keep it
+     * until a style is picked.
      */
     val animatedArtworkStyle: Flow<String> get() = watch(KEY_ANIMATED_ART_STYLE) { animatedArtworkStyleNow }
     val animatedArtworkStyleNow: String
         get() = prefs.getString(KEY_ANIMATED_ART_STYLE, null)
-            ?: if (prefs.getBoolean(KEY_ANIMATED_ART_FULL, true)) STYLE_FULL_SCREEN else STYLE_CARD
+            ?: when {
+                !prefs.contains(KEY_ANIMATED_ART_FULL) -> STYLE_EDGE
+                prefs.getBoolean(KEY_ANIMATED_ART_FULL, true) -> STYLE_FULL_SCREEN
+                else -> STYLE_CARD
+            }
     fun setAnimatedArtworkStyle(value: String) =
         prefs.edit().putString(KEY_ANIMATED_ART_STYLE, value).apply()
 
@@ -449,6 +455,11 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
         get() = prefs.getBoolean(KEY_HYMN_INTRO_SEEN, false)
         set(value) = prefs.edit().putBoolean(KEY_HYMN_INTRO_SEEN, value).apply()
 
+    /** When the "Buy me a Diet Coke" popup last showed by itself (epoch ms), or 0 if never. */
+    var supportPromptShownAt: Long
+        get() = prefs.getLong(KEY_SUPPORT_PROMPT_SHOWN_AT, 0L)
+        set(value) = prefs.edit().putLong(KEY_SUPPORT_PROMPT_SHOWN_AT, value).apply()
+
     // --- queue snapshot ----------------------------------------------------
 
     fun saveQueue(songs: List<Song>, index: Int, positionMs: Long) {
@@ -622,6 +633,7 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
         private const val KEY_ANIMATED_ART_STYLE = "animated_artwork_style"
         private const val STYLE_FULL_SCREEN = "FULL_SCREEN"
         private const val STYLE_CARD = "CARD"
+        private const val STYLE_EDGE = "EDGE"
         private const val KEY_ANIMATED_ART_SOURCE = "animated_artwork_source"
         private const val KEY_AMBIENT_CASSETTE = "ambient_cassette"
         private const val KEY_RESTORE_QUEUE = "restore_queue"
@@ -659,6 +671,7 @@ class AppPreferences @Inject constructor(@ApplicationContext context: Context) {
         private const val KEY_NOW_PLAYING_IS_PLAYING = "now_playing_is_playing"
         private const val KEY_DISMISSED_UPDATE = "dismissed_update_version"
         private const val KEY_HYMN_INTRO_SEEN = "hymn_intro_seen"
+        private const val KEY_SUPPORT_PROMPT_SHOWN_AT = "support_prompt_shown_at"
 
         /**
          * The settings included in a backup. Session/volatile keys (queue, now-playing, sleep

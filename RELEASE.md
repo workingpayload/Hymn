@@ -1,5 +1,28 @@
 # Release notes
 
+## v5.0.0 — 2026-11-25
+
+A brand-new Home, colour from your artwork by default, and smoother scrolling.
+
+### New Home
+- **A fresh look.** Today's date and a greeting up top, with your listening stats a tap away. A featured carousel leads the page: play or shuffle songs, open albums and playlists. The glow behind the page takes the colour of the cover in view.
+- **Moods.** A row of mood chips (Pop, Hip-Hop, Chill, Workout, Focus, Party, Jazz and more) starts a queue for that mood, with the songs you're likely to love first. Each tap brings a new mix; hour-long compilations are left out.
+- **Quick tiles.** Liked Songs, Downloads and Shuffle All, one tap from Home.
+- **Your daily mixes.** Up to four mixes, each grown from a different favourite of yours. They change from one day to the next and stay put within a day.
+- **New from artists you follow.** Recent albums and singles from the artists you follow, newest first, so a new release doesn't pass you by.
+- **Quick picks.** Your top song shelf and Trending now are laid out as compact grids; other shelves get restyled cards and round artist photos, with skeletons while they load.
+
+### Improvements
+- **Smoother scrolling.** Home scrolls more smoothly, and the floating glass bars cost much less to draw while they shrink and grow.
+- **Artist pages open with a preview.** The artist's photo and name show straight away while the rest of the page loads, instead of a bare spinner.
+- **New defaults.** AMOLED black, colour from album art and Mix are now on by default, and animated album art defaults to the **Top** style. If you changed any of these yourself, your choice is kept.
+- **Buy me a Diet Coke.** The support popup now shows up by itself every couple of days, at a random moment after you open the app. It never interrupts another popup.
+
+### Notes
+- The watch app is unchanged; v4.0.0 on the watch works with v5.0.0 on the phone.
+- No database change (still schema v6), so your library carries over untouched.
+- Still not Play-shippable (GPLv3 NewPipeExtractor + YouTube ToS); for personal / educational use.
+
 ## v4.1.0 — 2026-11-08
 
 Save any queue as a playlist, playlists that keep going, and Ko-fi support.

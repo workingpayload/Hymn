@@ -6,14 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicsm.R
 import com.example.musicsm.data.auth.YouTubePersonalization
+import com.example.musicsm.domain.model.Album
 import com.example.musicsm.domain.model.Artist
+import com.example.musicsm.domain.model.BrowseTile
 import com.example.musicsm.domain.model.HomeFeed
 import com.example.musicsm.domain.model.HomeItem
 import com.example.musicsm.domain.model.HomeSection
 import com.example.musicsm.domain.model.ListeningStats
 import com.example.musicsm.domain.model.Song
 import com.example.musicsm.domain.model.StatsRange
+import com.example.musicsm.domain.recommend.DailyMix
+import com.example.musicsm.domain.recommend.DailyMixes
 import com.example.musicsm.domain.recommend.DailyRotation
+import com.example.musicsm.domain.recommend.NewReleases
 import com.example.musicsm.domain.recommend.ShelfRanker
 import com.example.musicsm.domain.recommend.TasteProfile
 import com.example.musicsm.domain.recommend.TasteProfiles
@@ -28,12 +33,17 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 sealed interface HomeUiState {
@@ -49,6 +59,8 @@ sealed interface HomeUiState {
         val offline: Boolean = false,
         val loadingMore: Boolean = false,
         val canLoadMore: Boolean = false,
+        /** Today's personal mixes, shown as their own row under the hero; empty hides it. */
+        val mixes: List<DailyMix> = emptyList(),
         /**
          * Scroll-paging attempts made so far.
          *
@@ -61,6 +73,12 @@ sealed interface HomeUiState {
 
     data class Error(val message: String) : HomeUiState
 }
+
+/** What the quick tiles count: liked songs (also what "Shuffle all" plays) and downloads. */
+data class QuickTiles(
+    val likedCount: Int = 0,
+    val downloadCount: Int = 0,
+)
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -78,6 +96,37 @@ class HomeViewModel @Inject constructor(
 
     private val _refreshing = MutableStateFlow(false)
     val refreshing = _refreshing.asStateFlow()
+
+    /** Mood chips under the greeting; each plays its mood in one tap. */
+    val moods: List<BrowseTile> = repository.browseTiles()
+
+    /** The mood chip whose queue is being fetched, by id. */
+    private val _moodLoading = MutableStateFlow<String?>(null)
+    val moodLoading = _moodLoading.asStateFlow()
+
+    /** The latest taste profile, so a mood can lead with the listener's favourite acts. */
+    private var profile = TasteProfile()
+
+    /** The day's mixes, by the anchor tracks they were grown from. */
+    private var mixCache: Pair<List<String>, List<DailyMix>>? = null
+
+    /** Followed artists' pages fetched for this build, by id, reused when paging. */
+    private val artistPageCache = HashMap<String, Artist>()
+
+    /** Counts for the quick tiles under the moods; live, since likes and downloads change. */
+    val quickTiles: StateFlow<QuickTiles> = combine(
+        libraryRepository.likedSongs(),
+        downloadRepository.downloads(),
+    ) { liked, downloads -> QuickTiles(likedCount = liked.size, downloadCount = downloads.size) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), QuickTiles())
+
+    /** Shuffle-play everything the listener has liked. */
+    fun shuffleLiked(onReady: (List<Song>) -> Unit) {
+        viewModelScope.launch {
+            val liked = runCatching { libraryRepository.likedSongs().first() }.getOrDefault(emptyList())
+            if (liked.isNotEmpty()) onReady(liked)
+        }
+    }
 
     /** Cursor into the provider's feed, and the artists not yet given a shelf of their own. */
     private var continuation: String? = null
@@ -164,7 +213,11 @@ class HomeViewModel @Inject constructor(
             pendingArtists = pendingArtists.drop(batch.size)
 
             batch
-                .map { artist -> async { runCatching { repository.artist(artist.id) }.getOrNull() } }
+                .map { artist ->
+                    async {
+                        artistPageCache[artist.id] ?: runCatching { repository.artist(artist.id) }.getOrNull()
+                    }
+                }
                 .awaitAll()
                 .filterNotNull()
                 .mapNotNull { page ->
@@ -189,6 +242,7 @@ class HomeViewModel @Inject constructor(
     private suspend fun build(showLocalFirst: Boolean) {
         continuation = null
         pendingArtists = emptyList()
+        artistPageCache.clear()
 
         val local = runCatching { buildLocal() }.getOrNull()
         if (local == null) {
@@ -204,13 +258,14 @@ class HomeViewModel @Inject constructor(
         }
 
         val shown = local.sections.songIds().toMutableSet()
+        profile = local.profile
         val network = runCatching { buildNetwork(local.profile, local.followed, shown) }
-            .getOrDefault(emptyList())
+            .getOrDefault(NetworkFeed())
 
         // Artists already given a shelf on the first page are not offered again while paging.
         pendingArtists = local.followed.drop(SEED_COUNT)
 
-        _state.value = if (network.isEmpty()) {
+        _state.value = if (network.sections.isEmpty()) {
             // Nothing came back from the catalog. Pad the local shelves with anything else that
             // is playable without a connection rather than leaving a near-empty page.
             HomeUiState.Content(
@@ -219,7 +274,8 @@ class HomeViewModel @Inject constructor(
             )
         } else {
             HomeUiState.Content(
-                feed = HomeFeed(merge(local.sections, network), continuation),
+                feed = HomeFeed(merge(local.sections, network.sections), continuation),
+                mixes = network.mixes,
                 canLoadMore = continuation != null || pendingArtists.isNotEmpty(),
             )
         }
@@ -272,7 +328,7 @@ class HomeViewModel @Inject constructor(
         localProfile: TasteProfile,
         followed: List<Artist>,
         shown: MutableSet<String>,
-    ): List<HomeSection> = coroutineScope {
+    ): NetworkFeed = coroutineScope {
         // With YouTube personalisation on, the account's play history sharpens the profile; it is
         // fetched here rather than in the local phase so the instant offline shelves don't wait.
         val accountHistory = runCatching { repository.accountHistory() }.getOrDefault(emptyList())
@@ -281,7 +337,12 @@ class HomeViewModel @Inject constructor(
         } else {
             runCatching { buildProfile(followed, accountHistory) }.getOrDefault(localProfile)
         }
+        this@HomeViewModel.profile = profile
         val seedArtists = followed.take(SEED_COUNT)
+        // More follows are looked up than get a song shelf, so new releases cover a wider circle.
+        val releaseArtists = followed.take(RELEASE_ARTIST_COUNT)
+
+        val mixesAsync = async { buildMixes(profile) }
 
         val discoverAsync = async {
             val seeds = DailyRotation.pick(profile.discoveryPool(), DISCOVER_SEEDS)
@@ -310,10 +371,9 @@ class HomeViewModel @Inject constructor(
             }
         }
         val artistPagesAsync = async {
-            seedArtists
-                .map { artist -> async { runCatching { repository.artist(artist.id) }.getOrNull() } }
+            releaseArtists
+                .map { artist -> async { artist.id to runCatching { repository.artist(artist.id) }.getOrNull() } }
                 .awaitAll()
-                .filterNotNull()
         }
         val trendingAsync = async { runCatching { repository.trending() }.getOrDefault(emptyList()) }
         val genericAsync = async {
@@ -337,6 +397,24 @@ class HomeViewModel @Inject constructor(
             sections += generic.sections
             shown += generic.sections.songIds()
         }
+
+        // Kept so scrolling to "More from <artist>" later doesn't fetch the same pages again.
+        val fetchedPages = artistPagesAsync.await()
+        fetchedPages.forEach { (id, page) -> if (page != null) artistPageCache[id] = page }
+        val seedIds = seedArtists.mapTo(HashSet()) { it.id }
+        val allPages = fetchedPages.mapNotNull { it.second }
+        val artistPages = fetchedPages.filter { it.first in seedIds }.mapNotNull { it.second }
+
+        // Timely, and only ever from people the listener chose to follow, so it sits high up.
+        val pageAlbums = allPages.map { it.creditedAlbums() }
+        val releases = NewReleases.pick(pageAlbums, LocalDate.now().year, SHELF_SIZE)
+        if (releases.size >= MIN_RELEASE_SHELF) {
+            sections += HomeSection(
+                context.getString(R.string.shelf_new_from_followed),
+                releases.map { HomeItem.AlbumItem(it) },
+            )
+        }
+        val releaseIds = releases.mapTo(HashSet()) { it.id }
 
         addSongs(
             context.getString(R.string.shelf_daily_discover),
@@ -375,7 +453,6 @@ class HomeViewModel @Inject constructor(
             )
         }
 
-        val artistPages = artistPagesAsync.await()
         addSongs(
             context.getString(R.string.shelf_from_followed_artists),
             ShelfRanker.rank(
@@ -387,11 +464,11 @@ class HomeViewModel @Inject constructor(
             ),
         )
 
-        // The artist pages have already been fetched for the shelf above, so an album row costs
-        // nothing extra.
-        val albums = artistPages
-            .flatMap { it.albums }
-            .filter { it.id.isNotBlank() && it.title.isNotBlank() }
+        // The artist pages have already been fetched for the shelves above, so an album row costs
+        // nothing extra. Anything already offered as a new release isn't offered twice.
+        val albums = pageAlbums
+            .flatten()
+            .filter { it.id.isNotBlank() && it.title.isNotBlank() && it.id !in releaseIds }
             .distinctBy { it.id }
             .take(SHELF_SIZE)
         if (albums.size >= MIN_ALBUM_SHELF) {
@@ -416,7 +493,49 @@ class HomeViewModel @Inject constructor(
             }
         }
 
-        sections
+        NetworkFeed(sections, mixesAsync.await())
+    }
+
+    /**
+     * Today's daily mixes, each grown from a different favourite. One request per mix; the result
+     * is kept while the day's anchors stay the same, so a refresh doesn't fetch them again.
+     */
+    private suspend fun buildMixes(profile: TasteProfile): List<DailyMix> = coroutineScope {
+        val anchors = DailyMixes.anchors(profile, MIX_COUNT)
+        if (anchors.size < MIN_MIXES) return@coroutineScope emptyList()
+        val key = anchors.map { it.id }
+        mixCache?.takeIf { it.first == key }?.let { return@coroutineScope it.second }
+
+        val mixes = anchors
+            .map { seed -> async { runCatching { repository.relatedTo(seed.id) }.getOrDefault(emptyList()) } }
+            .awaitAll()
+            .mapIndexedNotNull { index, related ->
+                DailyMixes.assemble(number = index + 1, seed = anchors[index], related = related, limit = MIX_SIZE)
+            }
+            .takeIf { it.size >= MIN_MIXES }
+            .orEmpty()
+        if (mixes.isNotEmpty()) mixCache = key to mixes
+        mixes
+    }
+
+    /**
+     * Play a mood straight from its chip: the catalog's tracks for it, the listener's favourite
+     * acts first. [onReady] gets the queue; [onFailed] runs when nothing came back.
+     */
+    fun playMood(tile: BrowseTile, onReady: (List<Song>) -> Unit, onFailed: () -> Unit) {
+        if (_moodLoading.value != null) return
+        _moodLoading.value = tile.id
+        viewModelScope.launch {
+            try {
+                val candidates = runCatching { repository.searchSongs(tile.query) }.getOrDefault(emptyList())
+                // Searches for a mood turn up hour-long compilations; a mood queue is for songs.
+                val songs = candidates.filterNot { it.durationMs > MOOD_MAX_DURATION_MS }
+                val queue = ShelfRanker.rank(songs, profile, MOOD_SIZE, maxPerArtist = MOOD_MAX_PER_ARTIST)
+                if (queue.isEmpty()) onFailed() else onReady(queue)
+            } finally {
+                _moodLoading.value = null
+            }
+        }
     }
 
     /** Downloads / recently played / liked — playable without a connection. */
@@ -484,9 +603,30 @@ class HomeViewModel @Inject constructor(
         val followed: List<Artist>,
     )
 
+    /** What the catalog phase adds to the page. */
+    private data class NetworkFeed(
+        val sections: List<HomeSection> = emptyList(),
+        val mixes: List<DailyMix> = emptyList(),
+    )
+
     companion object {
         private const val SEED_COUNT = 4
         private const val SHELF_SIZE = 12
+
+        /** Daily mixes per day, and the fewest worth a row; each one is a request. */
+        private const val MIX_COUNT = 4
+        private const val MIN_MIXES = 2
+        private const val MIX_SIZE = 30
+
+        /** A mood queue's length, and how much of it one act may take. */
+        private const val MOOD_SIZE = 30
+        private const val MOOD_MAX_PER_ARTIST = 2
+        private const val MOOD_MAX_DURATION_MS = 15 * 60_000L
+
+        /** Followed artists whose pages are fetched for new releases (the first [SEED_COUNT] also
+         *  feed the song shelves), and the fewest releases worth a row. */
+        private const val RELEASE_ARTIST_COUNT = 8
+        private const val MIN_RELEASE_SHELF = 2
 
         /** Tracks that seed "Daily discover"; kept small because each one is a request. */
         private const val DISCOVER_SEEDS = 3
@@ -518,6 +658,14 @@ class HomeViewModel @Inject constructor(
 /** Every song id on these shelves, used to stop later shelves repeating earlier ones. */
 private fun List<HomeSection>.songIds(): Set<String> =
     flatMap { section -> section.items.mapNotNull { (it as? HomeItem.SongItem)?.song?.id } }.toSet()
+
+/**
+ * The page's releases, credited to the artist. Cards on an artist page don't name the artist (the
+ * page already does), so the source falls back to repeating the title as the byline.
+ */
+private fun Artist.creditedAlbums(): List<Album> = albums.map { album ->
+    if (album.artist.isBlank() || album.artist == album.title) album.copy(artist = name) else album
+}
 
 /**
  * Concatenate shelves, dropping any later one that reuses an earlier title.

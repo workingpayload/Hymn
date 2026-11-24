@@ -226,8 +226,13 @@ fun GlassPanel(
 
 /**
  * Apple-style Liquid Glass: the content behind is saturated, lightly blurred and bent by a lens
- * band along the rounded edge, with a specular highlight and soft shadow from the library. The
- * lens needs Android 13 (RuntimeShader); Android 12 keeps the blur and vibrancy.
+ * band along the rounded edge, with a specular highlight from the library. The lens needs
+ * Android 13 (RuntimeShader); Android 12 keeps the blur and vibrancy.
+ *
+ * The bar's pills change size every frame while it minimises on scroll, so nothing here may cost
+ * a rebuilt offscreen buffer per size change beyond the backdrop itself: the drop shadow is the
+ * renderer's own elevation shadow (drawn analytically) rather than the library's blurred shadow
+ * layer, and the rim is a crisp stroke rather than a blur-filtered one.
  */
 @Composable
 private fun LiquidGlassPanel(
@@ -240,6 +245,13 @@ private fun LiquidGlassPanel(
     val hazeTint = LocalMusicSmPalette.current.hazeTint
     Box(
         modifier = modifier
+            .shadow(
+                elevation = LIQUID_SHADOW_ELEVATION,
+                shape = shape,
+                clip = false,
+                ambientColor = Color.Black.copy(alpha = 0.25f),
+                spotColor = Color.Black.copy(alpha = 0.35f),
+            )
             .drawBackdrop(
                 backdrop = backdrop,
                 shape = { shape },
@@ -252,7 +264,8 @@ private fun LiquidGlassPanel(
                         depthEffect = true,
                     )
                 },
-                highlight = { Highlight.Default },
+                highlight = { LiquidHighlight },
+                shadow = null,
                 onDrawSurface = {
                     drawRect(hazeTint)
                     drawRect(tint)
@@ -262,6 +275,11 @@ private fun LiquidGlassPanel(
         content = content,
     )
 }
+
+/** The library's default rim, without the blur filter that is re-rasterised on every resize. */
+private val LiquidHighlight = Highlight(blurRadius = 0.dp)
+
+private val LIQUID_SHADOW_ELEVATION = 10.dp
 
 // Clear rather than frosted, so what is behind stays recognisable through the bend.
 private val LIQUID_BLUR = 4.dp

@@ -58,6 +58,7 @@ import com.example.musicsm.ui.components.ArtworkImage
 import com.example.musicsm.ui.components.ChromeScrim
 import com.example.musicsm.ui.components.ErrorState
 import com.example.musicsm.ui.components.HeroArtwork
+import com.example.musicsm.ui.components.DetailLoadingPreview
 import com.example.musicsm.ui.components.LocalBottomBarPadding
 import com.example.musicsm.ui.components.SectionHeader
 import com.example.musicsm.ui.components.SongRow
@@ -137,21 +138,17 @@ fun ArtistDetailScreen(
             },
     ) {
         when {
-            ui.loading -> Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                if (ui.name.isNotBlank()) {
-                    Text(
-                        text = ui.name,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                    Spacer(Modifier.height(20.dp))
-                }
-                CircularProgressIndicator(color = Coral)
+            // The photo and name already seen (a card, a followed artist) stand in while it loads.
+            ui.loading && (artworkUrl != null || ui.name.isNotBlank()) -> DetailLoadingPreview(
+                artworkUrl = artworkUrl,
+                title = ui.name,
+                subtitle = "",
+                tint = tint,
+                rowArtwork = true,
+            )
+
+            ui.loading -> Box(Modifier.fillMaxSize()) {
+                CircularProgressIndicator(color = Coral, modifier = Modifier.align(Alignment.Center))
             }
 
             ui.error != null -> Box(Modifier.fillMaxSize()) {

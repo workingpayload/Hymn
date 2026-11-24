@@ -7,6 +7,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.musicsm.data.cache.CatalogPreviewCache
 import com.example.musicsm.domain.model.Album
 import com.example.musicsm.domain.model.Artist
 import com.example.musicsm.domain.model.Song
@@ -18,7 +19,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,6 +40,7 @@ class ArtistDetailViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val musicRepository: MusicRepository,
     private val libraryRepository: LibraryRepository,
+    private val previews: CatalogPreviewCache,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -67,7 +71,33 @@ class ArtistDetailViewModel @Inject constructor(
         viewModelScope.launch {
             // Seed only human-readable artist names. Channel/browse ids are internal routing keys
             // and should never flash as visible page text while metadata is loading.
-            _state.value = ArtistDetailUiState(loading = true, name = displayableArtistSeed(artistId))
+            val seed = displayableArtistSeed(artistId)
+            // Whatever a card already showed for this artist paints the header straight away.
+            val preview = previews.get(artistId) ?: seed.takeIf { it.isNotEmpty() }?.let(previews::artistNamed)
+            _state.value = ArtistDetailUiState(
+                loading = true,
+                name = preview?.title.visibleCatalogText() ?: seed,
+                artworkUrl = preview?.artworkUrl,
+            )
+            if (preview?.artworkUrl == null) {
+                // Followed artists keep their photo in the library, which covers the rows built
+                // from it (Home's "Your artists", Library) that never went through the catalog.
+                launch {
+                    val followed = runCatching { libraryRepository.likedArtists().first() }.getOrNull()
+                        ?.firstOrNull { it.id == artistId || (seed.isNotEmpty() && it.name.equals(seed, ignoreCase = true)) }
+                        ?: return@launch
+                    _state.update { current ->
+                        if (!current.loading) {
+                            current
+                        } else {
+                            current.copy(
+                                name = current.name.ifBlank { followed.name.visibleCatalogText().orEmpty() },
+                                artworkUrl = current.artworkUrl ?: followed.artworkUrl,
+                            )
+                        }
+                    }
+                }
+            }
             runCatching { musicRepository.artist(artistId) }
                 .onSuccess { artist ->
                     val topSongs = artist.topSongs.map { it.withVisibleArtistFallback(artist.name) }

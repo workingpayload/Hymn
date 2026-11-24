@@ -1,6 +1,6 @@
 # Hymn
 
-**v4.1.0** — A dark, glassmorphic music‑streaming app for Android. Real audio streamed from YouTube via NewPipeExtractor and played through AndroidX Media3, wrapped in a Jetpack Compose UI inspired by an aurora‑glass design language (coral accent, Plus Jakarta Sans). Also plays music stored on your device.
+**v5.0.0** — A dark, glassmorphic music‑streaming app for Android. Real audio streamed from YouTube via NewPipeExtractor and played through AndroidX Media3, wrapped in a Jetpack Compose UI inspired by an aurora‑glass design language (coral accent, Plus Jakarta Sans). Also plays music stored on your device.
 
 > **Not shippable to Google Play.** Hymn streams from YouTube and depends on GPLv3 `NewPipeExtractor`; it is a personal / educational project, not a distributable product.
 
@@ -9,7 +9,7 @@
 ## Features
 
 **Browse & discover**
-- **Home** — taste‑based shelves from your history, likes, and followed artists (*Recommended for you*, *Daily discover*, *Because you liked …*, *Forgotten favourites*, *From artists you follow*, *Albums you might have missed*), real **Trending now**, plus curated genre/mood tiles. Pull‑to‑refresh, shimmer skeletons; offline fallback to downloads/recent/liked.
+- **Home** — a greeting and a featured carousel up top, **mood chips** that start a queue for the mood, quick tiles for Liked Songs / Downloads / Shuffle All, up to four **daily mixes**, *New from artists you follow*, then taste‑based shelves from your history, likes, and followed artists (*Recommended for you*, *Daily discover*, *Because you liked …*, *Forgotten favourites*, *From artists you follow*, *Albums you might have missed*) and real **Trending now**. Pull‑to‑refresh, shimmer skeletons; offline fallback to downloads/recent/liked.
 - **Search** — songs, videos, albums, artists (videos cover what isn't a released song: unreleased tracks, leaks, covers, live recordings; turn on in Settings); **Album** and **Artist** detail pages; follow artists.
 - **Listening Stats** — top tracks/artists over time.
 
